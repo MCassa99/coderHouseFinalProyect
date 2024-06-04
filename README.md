@@ -1,4 +1,4 @@
-# coderHouseFinalProyect
+# Proyecto Final Full Stack Developer Coder House
 ¡Bienvenido/a a mi Proyecto Final! Este es un proyecto creativo desarrollado como parte de mi curso de Full Stack Developer en Coder House. Aquí encontrarás la implementación de una aplicación web con tecnologías modernas tanto en el frontend como en el backend.
 
 ***Descripción***  
