@@ -1,0 +1,180 @@
+/* Colors */
+$primary: #1b98e0;
+$secondary: #e8f1f2;
+$alternative: #006494;
+
+@font-face {
+  font-family: "Regisha";
+  src: local("Regisha"),
+    url("./assets/fonts/Regisha.otf") format("truetype");
+  font-weight: bold;
+}
+
+.navprop{
+  &:hover, &:active &:focus{
+    color: $secondary;
+  }
+  color: $secondary;
+}
+
+//////////////////////////////
+//          APP SCSS        //
+//////////////////////////////
+
+html {
+  -webkit-user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  overflow-x: hidden;
+  background-color: $primary;
+  height: 100%;
+}
+
+.bg {
+  background-color: $primary;
+  height: 100%;
+}
+
+.navbar{
+  background-color: $alternative;
+  color: $secondary;
+}
+
+.greeting, .cart, .navbutton{
+  color: $secondary;
+}
+
+//////////////////////////////
+//    PRODUCT CARDS SCSS    //
+//////////////////////////////
+
+.stay {
+  position: relative;
+  top: -.8rem;
+  left: 1rem;
+  background-color: $alternative;
+  width: fit-content;
+  padding: .2rem;
+  padding-left: .5rem;
+  padding-right: .5rem;
+  border-radius: .5rem;
+  font-weight: 700;
+  font-size: small;
+  color: $secondary;
+}
+
+.card-img-top {
+  height: 20vw;
+  object-fit: cover;
+  @media (max-width: 991px) {
+    height: 25vw;
+  }
+  @media (max-width: 767px) {
+    height: 35vw;
+  }
+  @media (max-width: 575px) {
+    height: 50vw;
+  }
+  -webkit-user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.detail-img {
+  min-height: 75vh;
+  max-height: 75vh;
+  background-size: 100vw;
+}
+
+.card-footer{
+  margin-top: -1rem;
+}
+
+.hoverProduct{
+  background-color: $alternative;
+  color: $secondary;
+}
+
+//////////////////////////////
+//    DETAILS CARD  SCSS    //
+//////////////////////////////
+
+.price{
+  font-family: "Regisha";
+  font-weight: 700;
+  font-size: xx-large;
+  color: $primary;
+}
+
+.detail-stay {
+  margin-top: -1.5rem;
+  font-weight: 600;
+  background-color: $alternative;
+  width: fit-content;
+  padding: .2rem;
+  padding-left: .5rem;
+  padding-right: .5rem;
+  border-radius: .5rem;
+  color: $secondary;
+}
+
+.Regisha-3{
+  font-family: "Regisha";
+  font-size: 3rem;
+}
+
+.Regisha-6{
+  font-family: "Regisha";
+  font-size: 6rem;
+}
+
+.color-s{
+  color: $secondary;
+}
+
+.description{
+  margin-top: -1rem;
+}
+
+.product-content{
+  padding: 5rem;
+  padding-top: 10rem;
+}
+
+.relevant-content{
+  color: #000;
+}
+
+.background-details{
+  height: calc(100vh - 4.2rem);
+  background-color: $primary;
+}
+
+.cart-text{
+  margin-top: -1rem;
+}
+
+.cart-card{
+  z-index: 0;
+  position: relative;
+}
+
+.cart-button{
+  z-index: 1;
+  position: relative;
+  border-radius: 50%;
+  height: 2rem;
+  width: 2rem;
+  text-align: center;
+  margin-bottom: -7.5rem;
+  margin-left: 1.5rem;
+}
+
+body.swal2-shown > [aria-hidden='true'] {
+  transition: 0.1s filter;
+  filter: blur(3px);
+}
