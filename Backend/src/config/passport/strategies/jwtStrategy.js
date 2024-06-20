@@ -3,9 +3,7 @@ import { userModel } from "../../../models/user.js";
 import varenv from '../../../dotenv.js';
 
 const cookieExtractor = (req) => {
-     console.log('req.cookies: ', req.cookies);
      const token = req.cookies ? req.cookies.jwtCookie : {};
-     console.log('token: ', token);
      return token;
 }
 
@@ -17,7 +15,7 @@ const jwtOptions = {
 
 export const jwtStrategy = new JwtStrategy(jwtOptions, async (payload, done) => {
      try {
-          console.log('payload: ', payload);
+          console.log('payload: ', payload.user._id);
           const user = await userModel.findById(payload.user._id);
           if (user) {
                return done(null, user);

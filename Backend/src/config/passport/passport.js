@@ -54,7 +54,7 @@ const initializePassport = () => {
             return done(error)
         }
     }));
-
+/*
     passport.use('github', new GithubStrategy({
         clientID: GITHUB_CLIENT_ID,
         clientSecret: GITHUB_CLIENT_SECRET,
@@ -78,7 +78,7 @@ const initializePassport = () => {
             return done(error)
         }
     }));
-
+*/
     passport.use('jwt', jwtStrategy);
 }
 

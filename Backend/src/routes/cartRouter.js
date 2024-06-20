@@ -13,7 +13,7 @@ cartRouter.post('/', createCart);
 cartRouter.get('/:cid', getCartById);
 
 //Agregar un producto al carrito
-cartRouter.post('/:cid/: pid', addProductToCart);
+cartRouter.post('/:cid/:pid', addProductToCart);
 
 //Creo Ticket de compra
 cartRouter.post('/:cid/purchase', createTicket);

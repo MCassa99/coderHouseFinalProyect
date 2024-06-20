@@ -13,13 +13,27 @@ export const generateToken = (user) => {
 
 console.log(generateToken(
      {
-          "_id": "660b5029ae521ade032091c6",
-          "first_name": "Matias Cassanello",
-          "last_name": " ",
-          "age": 18,
+          "_id": "666108422d9e94f83518e78a",
+          "first_name": "Matias",
+          "last_name": "Cassanello",
+          "age": 24,
           "email": "mcassa1999@gmail.com",
-          "password": "$2b$11$mWzu.UarmO36boICY2p.Zue7GTfgrgC8P2Uamrt/2K/6RG3rteyvG",
-          "role": "User",
+          "password": "$2b$12$n2VxPGco91KrgWAfvGWR.OEy3Et/NTd6VEwLEGxdldxRqLUQ17UeW",
+          "role": "Admin",
+          "cart_id": "666108422d9e94f83518e78b",
           "__v": 0
      }
 ));
+
+
+/*
+     "_id": "661739a0111773eba9eae765",
+     "first_name": "Francis",
+     "last_name": "Fernandez",
+     "password": "$2b$12$hN8/LhUsPQ8qZ7MmiJOXdeIsm.CzNKVEdhd48.p6dd3GFrWqdibty",
+     "age": 28,
+     "email": "francis@francis.com",
+     "rol": "Admin",
+     "cart_id": "661739a0111773eba9eae766",
+     "__v": 0
+*/

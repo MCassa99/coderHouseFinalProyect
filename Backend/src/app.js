@@ -12,7 +12,8 @@ import { Server } from 'socket.io'
 import { engine } from 'express-handlebars'
 import { __dirname } from './path.js'
 import Template from 'handlebars'
-import compression from 'express-compression';
+import compression from 'compression'
+import { addLogger } from './utils/logger.js';
 
 
 //Config
@@ -36,9 +37,11 @@ mongoose.connect(varenv.mongodb)
 app.use(express.json());
 //Compress all responses
 //Exchanges CPU time for smaller file sizes and faster transmission
-appRouter.use(compression({
+app.use(compression({
     brotli: { enabled: true, zlib: { } }
 }));
+//Logger
+//app.use(addLogger);
 
 app.use(session({
     secret: varenv.sessionSecret,
