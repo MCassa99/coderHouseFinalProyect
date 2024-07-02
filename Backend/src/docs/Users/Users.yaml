@@ -1,0 +1,127 @@
+paths:
+  /api/users/:
+    get:
+      summary: Get all users of the application
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Users were obtained successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '500':
+          description: Internal server error.
+
+    post:
+      summary: Create a user in the application.
+      tags:
+        - Users
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              first_name:
+                type: String
+                description: User's first name.
+              last_name:
+                type: String
+                description: User's last name.
+              age:
+                type: Integer
+                description: User's age.
+              email:
+                type: String
+                description: User's email.
+              password:
+                type: String
+                description: User's password.
+              role:
+                type: String
+                description: User's role.
+              cart_id:
+                type: ObjectId
+                description: Unique identifier of the user's cart.
+      
+      responses:
+        '201':
+          description: User was created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request.
+        '500':
+          description: Internal server error.
+
+
+  /api/users/{id}:
+    get:    
+      summary: Get one user by it's unique id.
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Unique identifier of the user.
+          schema:
+            $type: String
+      responses:
+        '200':
+          description: User was obtained successfully.
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/User'
+        '404':
+          description: User not found.
+        '500':
+          description: Internal server error.
+        
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Unique identifier of the user.
+        first_name:
+          type: String
+          description: User's first name.
+        last_name:
+          type: String
+          description: User's last name.
+        age:
+          type: Integer
+          description: User's age.
+        email:
+          type: String
+          description: User's email.
+        password:
+          type: String
+          description: User's password.
+        role:
+          type: String
+          description: User's role.
+        cart_id:
+          type: ObjectId
+          description: Unique identifier of the user's cart.
+      example:
+        _id: ObjectId('5f7f1b3b7b3b3b3b3b3b3b3b')
+        first_name: John
+        last_name: Doe
+        age: 25
+        email: jhon@doe.com
+        password: password123
+        role: user
+        cart_id: ObjectId('5f7f1b3b7b3b3b3b3b3b3b3b')

@@ -8,7 +8,7 @@ import mailRouter from './mailRouter.js';
 import { __dirname } from '../path.js';
 import multerRouter from './multerRouter.js';
 import utilsRouter from './utilsRouter.js';
-
+import docsRouter from './docsRouter.js';
 
 //Config
 const appRouter = Router();
@@ -27,5 +27,6 @@ appRouter.use('/api/users', userRouter);
 appRouter.use('/api/session', sessionRouter);
 appRouter.use('/api/mail', mailRouter);
 appRouter.use('/api/utils', utilsRouter);
+appRouter.use('/api/docs', docsRouter);
 
 export default appRouter;

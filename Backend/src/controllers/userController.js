@@ -4,17 +4,26 @@ const userService = new User();
 
 export const getUsers = async (req, res) => {
      const user = await userService.getUsers();
-     res.status(200).send(user);
+     if (user == null)
+          res.status(500).send("Error al obtener usuarios");
+     else
+          res.status(200).send(user);
 }
 
 export const getUserById = async (req, res) => {
      const { id } = req.params;
      const user = await userService.getUserById(id);
-     res.status(200).send(user);
+     if (user == null)
+          res.status(500).send("Error al obtener usuario por id");
+     else
+          res.status(200).send(user);
 }
 
 export const createUser = async (req, res) => {
      const user = req.body;
      const newUser = await userService.createUser(user);
-     res.status(200).send(newUser);
+     if (newUser == null)
+          res.status(500).send("Error al crear usuario");
+     else
+          res.status(200).send(newUser);
 }
