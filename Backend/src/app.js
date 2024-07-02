@@ -13,12 +13,12 @@ import { engine } from 'express-handlebars'
 import { __dirname } from './path.js'
 import Template from 'handlebars'
 import compression from 'compression'
-import { addLogger } from './utils/logger.js';
+//import { addLogger } from './utils/logger.js';
 
 
 //Config
 const app = express();
-const PORT = 3000;
+const PORT = varenv.port || 3000;
 
 
 //Server

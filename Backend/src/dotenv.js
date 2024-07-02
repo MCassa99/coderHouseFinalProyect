@@ -3,6 +3,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const varenv = {
+     nodeENV: process.env.NODE_ENV,
+     host: process.env.HOST,
+     port: process.env.PORT,
      mongodb: process.env.MONGODB_URL,
      salt: process.env.SALT,
      sessionSecret: process.env.SESSION_SECRET,

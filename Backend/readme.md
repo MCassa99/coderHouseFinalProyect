@@ -14,6 +14,12 @@ Para poder ejecutar el proyecto en tu máquina local, sigue los siguientes pasos
 2. Abre el proyecto en tu IDE favorito.
 3. Ejecuta la aplicación.
 
+## Ejecución de Tests
+
+Instale Mocha para poder realizar los test globalmente.
+    npm install -D mocha
+
+
 ## Contacto
 
 Si tienes alguna pregunta o sugerencia sobre el proyecto, no dudes en contactarme. Puedes encontrarme en [LinkedIn](https://www.linkedin.com/in/matiascassanello/) o enviarme un correo electrónico a mcassa1999@gmail.com.

@@ -7,7 +7,8 @@
      "scripts": {
           "test": "echo \"Error: no test specified\" && exit 1",
           "dev": "node --watch src/app.js",
-          "devNode": "nodemon src/app.js"
+          "devNode": "nodemon src/app.js",
+          "mochaTest": "mocha test/User.test.js"
      },
      "keywords": [],
      "author": "",
@@ -38,5 +39,8 @@
           "swagger-jsdoc": "^6.2.8",
           "swagger-ui-express": "^5.0.1",
           "winston": "^3.13.0"
+     },
+     "devDependencies": {
+          "mocha": "^10.5.2"
      }
 }
