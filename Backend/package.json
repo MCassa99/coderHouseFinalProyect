@@ -8,7 +8,8 @@
           "test": "echo \"Error: no test specified\" && exit 1",
           "dev": "node --watch src/app.js",
           "devNode": "nodemon src/app.js",
-          "mochaTest": "mocha test/User.test.js"
+          "mochaTest": "mocha test/User.test.js",
+          "mochaChai": "mocha test/UserChai.test.js"
      },
      "keywords": [],
      "author": "",
@@ -41,6 +42,7 @@
           "winston": "^3.13.0"
      },
      "devDependencies": {
-          "mocha": "^10.5.2"
+          "chai": "^5.1.1",
+          "mocha": "^10.6.0"
      }
 }

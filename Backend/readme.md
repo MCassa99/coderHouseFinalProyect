@@ -10,7 +10,7 @@ Este proyecto tiene como objetivo desarrollar una aplicación utilizando tecnolo
 
 Para poder ejecutar el proyecto en tu máquina local, sigue los siguientes pasos:
 
-1. Clona el repositorio desde GitHub: `git clone https://github.com/tu-usuario/nombre-del-repositorio.git`
+1. Clona el repositorio desde GitHub: `git clone https://github.com/usuario/nombre-del-repositorio.git`
 2. Abre el proyecto en tu IDE favorito.
 3. Ejecuta la aplicación.
 
@@ -18,7 +18,7 @@ Para poder ejecutar el proyecto en tu máquina local, sigue los siguientes pasos
 
 Instale Mocha para poder realizar los test globalmente.
     npm install -D mocha
-
+    npm install -D chai
 
 ## Contacto
 

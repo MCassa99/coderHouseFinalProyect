@@ -6,7 +6,7 @@ import varenv from "../src/dotenv.js";
 const assert = Assert.strict;
 
 //Conexión a la base de datos
-await mongoose.connect('mongodb+srv://mcassa99:pruebaCoderHouse@cluster0.gudv9d7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+await mongoose.connect(`${varenv.mongodb}`)
     .then(() => { console.log('Conexión a la base de datos exitosa'); })
     .catch((error) => { console.log('Error al conectarse a la base de datos: ' + error); });
 
@@ -14,8 +14,8 @@ describe('test CRUD de usuarios en la ruta /api/users', function () {
 
     //Previo a comenzar el test 
     before(() => {
-         console.log('- Inicio de las pruebas -');
-     });
+        console.log('- Inicio de las pruebas -');
+    });
     
     //Previo a comenzar cada test
     beforeEach(() => {

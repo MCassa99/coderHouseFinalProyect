@@ -10,6 +10,10 @@ Node.js
 Express.js  
 MongoDB Atlas  
 
+**Testing**
+Mocha
+Chai
+
 **Frontend**  
 React.js  
 Vite  
