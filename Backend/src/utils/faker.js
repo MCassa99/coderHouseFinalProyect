@@ -44,4 +44,4 @@ export const createRandomProducts = (req, res) => {
      res.status(200).send('Productos creados con exito');
 };
 
-console.log(users);
+//console.log(users);

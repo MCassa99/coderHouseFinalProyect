@@ -23,7 +23,7 @@ sessionRouter.get('/github', passport.authenticate('github', {scope: ['user:emai
 
 sessionRouter.get('/githubSession', passport.authenticate('github'), githubSession );
 
-sessionRouter.get('/current', passport.authenticate('jwt'), current);
+sessionRouter.get('/current', current);
 
 sessionRouter.post('/register', passport.authenticate('register'), register );
 

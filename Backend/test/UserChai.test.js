@@ -66,7 +66,7 @@ describe('test CRUD de usuarios en la ruta /api/users', function () {
      });
 
      //Quinto test para Users
-     it('Eliminar un usuario por id mediante el metodo DELETE', async() => {
+     it('Eliminar un usuario por id mediante el metodo DELETE', async () => {
           const userDeleted = await userModel.findByIdAndDelete(`${id}`);
           expect(userDeleted).to.be.ok;
      });

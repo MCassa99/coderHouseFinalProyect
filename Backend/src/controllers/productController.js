@@ -54,9 +54,12 @@ export const createProduct = async (req, res) => {
      try {
           const product = req.body;
           const createdProduct = await productModel.create(product);
-          res.status(201).send("Producto creado con exito", createdProduct);
+          if (createdProduct)
+               res.status(201).send({ message: "Producto creado con exito", product: createdProduct });
+          else
+               res.status(500).send({ message: "Error al crear producto" });
      } catch (error) {
-          res.status(500).send("Error al crear producto" + error);
+          res.status(500).send({ message: "Error al crear producto" + error });
      }
 }
 
@@ -65,9 +68,9 @@ export const updateProduct = async (req, res) => {
           const id = req.params.id;
           const product = req.body;
           const updatedProduct = await productModel.findByIdAndUpdate(id, product).lean();
-          res.status(200).send("Producto modificado con exito", updatedProduct);
+          res.status(200).send({ message: "Producto modificado con exito", product: updatedProduct });
      } catch (error) {
-          res.status(500).send("Error al modificar Producto" + error);
+          res.status(500).send({ message: "Error al modificar Producto" + error });
      }
 }
 
@@ -75,8 +78,8 @@ export const deleteProduct = async (req, res) => {
      try {
           const id = req.params.id;
           const deletedProduct = await productModel.findByIdAndDelete(id);
-          res.status(200).send("Producto eliminado con exito", deletedProduct);
+          res.status(200).send({ mesagge: "Producto eliminado con exito", product: deletedProduct });
      } catch (error) {
-          res.status(500).send("Error al eliminar producto" + error);
+          res.status(500).send({ message: "Error al eliminar producto" + error });
      }
 }

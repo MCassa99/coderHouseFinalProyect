@@ -25,5 +25,5 @@ export const createUser = async (req, res) => {
      if (newUser == null)
           res.status(500).send("Error al crear usuario");
      else
-          res.status(200).send(newUser);
+          res.status(201).send(newUser);
 }

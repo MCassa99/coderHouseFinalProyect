@@ -1,5 +1,5 @@
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
-import { userModel } from "../../../models/user.js";
+import { userModel } from '../../../models/user.js';
 import varenv from '../../../dotenv.js';
 
 const cookieExtractor = (req) => {
@@ -14,6 +14,7 @@ const jwtOptions = {
 };
 
 export const jwtStrategy = new JwtStrategy(jwtOptions, async (payload, done) => {
+     console.log('AAAAAAAAA')
      try {
           console.log('payload: ', payload.user._id);
           const user = await userModel.findById(payload.user._id);
@@ -23,6 +24,7 @@ export const jwtStrategy = new JwtStrategy(jwtOptions, async (payload, done) => 
                return done(null, false);
           }
      } catch (error) {
+          console.log('Error: ', error);
           return done(error, null);
      }
 });

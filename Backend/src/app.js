@@ -18,7 +18,7 @@ import compression from 'compression'
 
 //Config
 const app = express();
-const PORT = varenv.port || 3000;
+const PORT = 3000;
 
 
 //Server
@@ -79,7 +79,7 @@ appRouter.get('/setCookie', (req, res) => {
 appRouter.get('/deleteCookie', (req, res) => {
     res.clearCookie('CookieCookie').send('Cookie eliminada');
 });
-*/
+
 //Chat
 const users = [];
 //Socket io
@@ -107,3 +107,5 @@ io.on('connection', (socket) => {
 Template.registerHelper("log", function(something) {
     console.log(something);
 });
+
+*/
