@@ -1,8 +1,10 @@
 import multer from "multer";
+import { __dirname } from '../path.js';
 
-const storage = multer.diskStorage({
+
+const storageProducts = multer.diskStorage({
     destination : (req, file, cb) => {
-        cb(null, 'src/public/images');
+        cb(null, `${__dirname}/public/images/products`);
     }
     ,
     filename : (req, file, cb) => {
@@ -10,6 +12,26 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({storage : storage});
+const storageDocs = multer.diskStorage({
+    destination : (req, file, cb) => {
+        cb(null, `${__dirname}/docs/uploadedUserDocs`);
+    }
+    ,
+    filename : (req, file, cb) => {
+        cb(null, `${file.originalname}`);
+    }
+});
 
-export default upload;
+const storageProfiles = multer.diskStorage({
+    destination : (req, file, cb) => {
+        cb(null, `${__dirname}/public/images/profiles`);
+    }
+    ,
+    filename : (req, file, cb) => {
+        cb(null, `${file.originalname}`);
+    }
+});
+
+export const uploadProducts = multer({ storage: storageProducts });
+export const uploadDocs = multer({ storage: storageDocs });
+export const uploadProfiles = multer({ storage: storageProfiles });

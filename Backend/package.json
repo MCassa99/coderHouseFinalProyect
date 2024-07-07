@@ -9,7 +9,8 @@
           "devNode": "nodemon src/app.js",
           "mochaTest": "mocha test/User.test.js",
           "mochaChai": "mocha test/UserChai.test.js",
-          "superTest": "mocha test/superTest.test.js"
+          "superTestProducts": "mocha test/superTestProducts.test.js",
+          "superTestSession": "mocha test/superTestSession.test.js"
      },
      "keywords": [],
      "author": "",

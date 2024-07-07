@@ -14,7 +14,6 @@ const jwtOptions = {
 };
 
 export const jwtStrategy = new JwtStrategy(jwtOptions, async (payload, done) => {
-     console.log('AAAAAAAAA')
      try {
           console.log('payload: ', payload.user._id);
           const user = await userModel.findById(payload.user._id);

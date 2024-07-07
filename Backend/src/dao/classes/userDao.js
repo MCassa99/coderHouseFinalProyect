@@ -33,5 +33,21 @@ export default class User {
                return null;
           }
      }
+
+     sendDocuments = async (uid, newDocuments) => {
+          try {
+               const user = await userModel.findByIdAndUpdate(uid, {
+                    $push: {
+                         documents: {
+                              $each: newDocuments
+                         },
+                    },
+               }, { new: true });
+               return user;
+          } catch (error) {
+               console.log("Error al enviar documentos ", error);
+               return null;
+          }
+     }
 }
 

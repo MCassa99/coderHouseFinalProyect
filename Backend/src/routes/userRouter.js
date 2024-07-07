@@ -9,4 +9,8 @@ userRouter.get('/:id', userController.getUserById);
 
 userRouter.post('/', userController.createUser);
 
+userRouter.post('/:uid/documents', userController.sendDocuments)
+
+userRouter.post('imagesProds', userController.sendImagesProds)
+
 export default userRouter;

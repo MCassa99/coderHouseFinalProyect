@@ -5,6 +5,7 @@ import { userModel } from '../models/user.js';
 import { validateHash, createHash } from "../utils/bcrypt.js";
 import { generateToken, verifyToken } from "../utils/jwt.js";
 import varenv from "../dotenv.js";
+import { tr } from "@faker-js/faker";
 
 export const login = async (req, res) => {
      try {
@@ -24,11 +25,11 @@ export const login = async (req, res) => {
                email: req.user.email,
                first_name: req.user.first_name,
                last_name: req.user.last_name,
-               role: req.user.role
+               role: req.user.role,
+               last_connection: req.user.last_connection
           }
           const userToken = generateToken(req.session.user);
-          console.log("Usuario: ", user, "\nToken: ", userToken)
-          console.log("UsuarioREQ: ", req.session.user)
+          console.log("Usuario Logeado: ", req.session.user)
           //console.log("Usuario: ", user, "\nToken: ", userToken)
           res.status(200).cookie('coderCookie', userToken, { maxAge: 3600000 }).send({ message: 'Logueado correctamente', user: req.session.user, token: userToken});
           
@@ -58,23 +59,36 @@ export const register = async (req, res) => {
 }
 
 export const current = async (req, res) => {
-     const cookie = req.cookies['coderCookie']
-     //console.log(cookie)
-     const user = verifyToken(cookie).user;
-     console.log("Usuario Logeado: ", user.email)     
-     if (user)
-          return res.send({ message: 'Usuario logeado:', user: user });
-     if (req.session.user) {
-          res.status(200).send({ message: 'Usuario logeado:', user: req.session.user });
-     } else {
-          res.status(401).send({ message: 'No hay usuario logueado' });
+     try {
+          const cookie = req.cookies['coderCookie']
+          //console.log(cookie)
+          const user = verifyToken(cookie).user;
+          console.log("Usuario Logeado: ", user.email)
+          if (user)
+               return res.send({ message: 'Usuario logeado:', user: user });
+          if (req.session.user) {
+               res.status(200).send({ message: 'Usuario logeado:', user: req.session.user });
+          } else {
+               res.status(401).send({ message: 'No hay usuario logueado' });
+          }
+     } catch (error) {
+          res.status(500).send({ message: 'Error al obtener usuario logueado' + error });
      }
 }
 
 export const logout = async (req, res) => {
-     req.session.destroy((error => 
-          error ? res.status(500).send({ message: 'Error al cerrar la sesion' }) : res.status(200).redirect('/')   
-     ));
+     try {
+          const user = await userModel.findOne({ email: req.session.user.email });
+          user.last_connection = new Date();
+          await user.save();
+          res.clearCookie('coderCookie');
+          console.log("Usuario Deslogueado: ", req.session.user.email)
+          req.session.destroy((error =>
+               error ? res.status(500).send({ message: 'Error al cerrar la sesion' }) : res.status(200).redirect('/')
+          ));
+     } catch (error) {
+          res.status(500).send({ message: 'Error al cerrar la sesion, verifique que haya sesion iniciada' });
+     }
 }    
 
 export const testJWT = async (req, res) => {
@@ -121,5 +135,24 @@ export const resetPassword = async (req, res) => {
           }
      } catch (error) {
           res.status(500).send('Error al cambiar la contraseña: ', error);
+     }
+}
+
+export const deleteUser = async (req, res) => {
+     const { email, password } = req.body;
+     try {
+          const user = await userModel.findOne({ email: email });
+          if (user) {
+               if (validateHash(password, user.password)) {
+                    await userModel.findByIdAndDelete(user._id);
+                    res.status(200).send('Usuario eliminado correctamente');
+               } else {
+                    res.status(400).send('Contraseña incorrecta');
+               }
+          } else {
+               res.status(404).send('Usuario no encontrado');
+          }
+     } catch (error) {
+          res.status(500).send('Error al eliminar usuario: ', error);
      }
 }
