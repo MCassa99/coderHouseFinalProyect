@@ -1,3 +1,4 @@
+import { raw } from 'express';
 import { Schema, model } from 'mongoose';
 import paginate from 'mongoose-paginate-v2';
 
@@ -30,9 +31,16 @@ const productSchema = new Schema({
           required: true,
           unique: true
      },
-     stock: {
+     stay_time: {
           type: Number,
           required: true
+     },
+     rating: {
+          type: Number
+     },
+     stock: {
+          type: Number,
+          //required: true
      },
      image: {
           type: String,

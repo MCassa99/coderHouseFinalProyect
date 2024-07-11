@@ -1,4 +1,4 @@
-import { collection, getDocs, getFirestore, where, query} from 'firebase/firestore'
+//import { collection, getDocs, getFirestore, where, query} from 'firebase/firestore'
 import ItemList from '../ItemList/ItemList'
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
@@ -7,8 +7,15 @@ const ItemListContainer = ({greeting}) => {
 
     const [product, setProduct] = useState([]);
     const { id } = useParams();
-    
+
+    // Import products from Backend GET /api/products on PORT 3000
     useEffect(() => {
+        fetch('http://localhost:3000/api/products')
+            .then(response => response.json())
+            .then(data => setProduct(data));
+    }, []);    
+    
+    /*useEffect(() => {
         const queryDB = getFirestore();
         const queryCollection = collection(queryDB, 'destino');
         if (id) {
@@ -21,7 +28,7 @@ const ItemListContainer = ({greeting}) => {
                 setProduct(response.docs.map((item) => ({...item.data(), id: item.id})));
             });
         }
-    }, [id]);
+    }, [id]);*/
 
     return (
         <div>

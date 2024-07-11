@@ -13,12 +13,21 @@ import { engine } from 'express-handlebars'
 import { __dirname } from './path.js'
 import Template from 'handlebars'
 import compression from 'compression'
+import cors from 'cors'
 //import { addLogger } from './utils/logger.js';
 
 
 //Config
 const app = express();
 const PORT = 3000;
+
+//Cors
+const corsOptions = {
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+};
+app.use(cors(corsOptions));
 
 
 //Server
