@@ -8,13 +8,24 @@ const ItemListContainer = ({greeting}) => {
     const [product, setProduct] = useState([]);
     const { id } = useParams();
 
-    // Import products from Backend GET /api/products on PORT 3000
-    useEffect(() => {
-        fetch('http://localhost:3000/api/products')
-            .then(response => response.json())
-            .then(data => setProduct(data));
-    }, []);    
-    
+    if (id) {
+        // Import products from Backend GET /api/products/category on PORT 3000
+        useEffect(() => {
+            fetch(`http://localhost:3000/api/products/?filter=${id}`)
+                .then(response => response.json())
+                .then(data => setProduct(data.products))
+                .catch(error => console.log(error))
+        }, []);
+    } else {
+        // Import products from Backend GET /api/products on PORT 3000
+        useEffect(() => {
+            fetch('http://localhost:3000/api/products')
+                //Muestro la respuesta en un console log
+                .then(response => response.json())
+                .then(data => setProduct(data.products))
+                .catch(error => console.log(error))
+        }, []);
+    }
     /*useEffect(() => {
         const queryDB = getFirestore();
         const queryCollection = collection(queryDB, 'destino');

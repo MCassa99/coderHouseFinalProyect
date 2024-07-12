@@ -32,14 +32,18 @@ const productSchema = new Schema({
           unique: true
      },
      stay_time: {
-          type: Number,
-          required: true
+          type: Number
+          //required: true
      },
      rating: {
           type: Number
      },
      stock: {
-          type: Number,
+          type: Number
+          //required: true
+     },
+     transshipment: {
+          type: Number
           //required: true
      },
      image: {

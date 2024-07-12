@@ -14,6 +14,7 @@ const ProductDetailContainer = () => {
             .then(response => response.json())
             .then(data => setProduct(data))
             .catch(error => <Error />)
+        console.log(product)
     }, [id])
 
     return (

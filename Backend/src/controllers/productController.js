@@ -18,16 +18,12 @@ export const getProducts = async (req, res) => {
 
           const query = letFilter ? { [letFilter]: filter } : {};
           const sortType = sort != undefined ? { price: sort } : {};
-
+          
           // Consulto los productos con el filtro y paginacion
           const products = await productModel.paginate(query, { limit: limitPerPage, page: actualPage, sort: sortType });
           const productsJSON = products.docs.map(product => product.toJSON());
 
-          res.status(200).render('templates/home', {
-               mostrarProductos: true,
-               productos: productsJSON,
-               css: 'home.css'
-          });
+          res.status(200).send({ products: productsJSON, totalProducts: products.totalDocs, totalPages: products.totalPages, currentPage: products.page, nextPage: products.nextPage, prevPage: products.prevPage });
      } catch (error) {
           res.status(500).send('Error interno del servidor al listar los productos' + error)
                .render('templates/error', {

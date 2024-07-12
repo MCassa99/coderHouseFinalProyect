@@ -9,7 +9,7 @@ const productRouter = Router();
 productRouter.get('/', getProducts );
 
 //Buscar un producto por ID
-productRouter.get('/:id', getProductById );
+productRouter.get('/:id', getProductById);
 
 //Agregar un producto
 productRouter.post('/', createProduct );

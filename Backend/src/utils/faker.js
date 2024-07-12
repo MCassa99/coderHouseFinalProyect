@@ -25,14 +25,15 @@ const products = [];
 
 const createRandomProduct = () => {
      const product = {
-          title: faker.commerce.product(),
-          description: faker.commerce.productDescription(),
-          price: faker.commerce.price({ min: 100, max: 3000, dec: 0 }),
-          category: faker.commerce.department(),
-          status: faker.datatype.boolean(),
-          code: faker.commerce.isbn(), //faker.commerce.product() + prod_id
-          stock: faker.number.int({ min: 1, max: 15 }),
-          image: faker.image.urlLoremFlickr(),
+          title: "Vuelo a Nueva York",
+          description: "Nueva York es una ciudad emblemática de Estados Unidos, conocida como La ciudad que nunca duerme. La vuelta aérea por Nueva York es impresionante, con vistas panorámicas de la ciudad y el río Hudson. ",
+          price: 500,
+          category: "vuelos",
+          code: "FLYNYC001",
+          rating: 4.5,
+          stock: 50,
+          transshipment: 0,
+          image: "https://www.interviajesny.com/wp-content/uploads/Vuelos-a-Nueva-York-.jpg"
      }
      products.push(product);
 };
