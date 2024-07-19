@@ -8,24 +8,22 @@ const ItemListContainer = ({greeting}) => {
     const [product, setProduct] = useState([]);
     const { id } = useParams();
 
-    if (id) {
-        // Import products from Backend GET /api/products/category on PORT 3000
-        useEffect(() => {
-            fetch(`http://localhost:3000/api/products/?filter=${id}`)
-                .then(response => response.json())
-                .then(data => setProduct(data.products))
-                .catch(error => console.log(error))
-        }, []);
-    } else {
-        // Import products from Backend GET /api/products on PORT 3000
-        useEffect(() => {
-            fetch('http://localhost:3000/api/products')
-                //Muestro la respuesta en un console log
-                .then(response => response.json())
-                .then(data => setProduct(data.products))
-                .catch(error => console.log(error))
-        }, []);
-    }
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = id
+                    ? await fetch(`http://localhost:3000/api/products/?filter=${id}`)
+                    : await fetch('http://localhost:3000/api/products');
+                const data = await response.json();
+                setProduct(data.products);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchProducts();
+    }, [id]); // Incluye `id` como dependencia aquí
+    
     /*useEffect(() => {
         const queryDB = getFirestore();
         const queryCollection = collection(queryDB, 'destino');

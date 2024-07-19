@@ -5,7 +5,7 @@ export const getProducts = async (req, res) => {
           const { page, limit, filter, sort } = req.query;
           let letFilter;
           const actualPage = page != undefined ? page : 1;
-          const limitPerPage = limit != undefined ? limit : 10;
+          const limitPerPage = limit != undefined ? limit : 100;
 
           // Consulto si hay un filtro
           if (filter == 'true' || filter == 'false') {

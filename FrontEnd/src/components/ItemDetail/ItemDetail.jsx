@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import StarRating from "../Item/StarRating";
-import { Link } from "react-router-dom";  
+import { Link } from "react-router-dom";
 
 import { useState } from "react";
 import ItemCounter from "./ItemCounter/ItemCounter";
@@ -8,7 +8,15 @@ import ItemCounter from "./ItemCounter/ItemCounter";
 
 const ProductDetail = ({ destino, children }) => {
 
-  const { id, title, stay, rating, price, img, desc, people, disp } = destino;
+  // Declarar todas las constantes fuera del bloque if
+  let _id, title, description, price, thumbnail, category, status, code, stock, transshipment, stay_time, rating, image;
+
+  // Asignar valores en función de la categoría
+  if (destino.category === 'vuelos') {
+    ({ _id, title, description, price, thumbnail, category, status, code, stock, transshipment, rating, image } = destino);
+  } else {
+    ({ _id, title, description, price, thumbnail, category, status, code, stock, stay_time, rating, image } = destino);
+  }
   const [count, setCount] = useState(1);
 
   function onAdd(count) {
@@ -19,23 +27,21 @@ const ProductDetail = ({ destino, children }) => {
     <>
       <Section id="hero" >
         <div className="background">
-          <img src={img} alt="" />
+          <img src={image} alt="" />
         </div>
         <div className="content" style={{ marginTop: 6 + 'rem' }}>
           <div className="title">
             <h1 className="mb-3">{title}</h1>
-            <span className="stay mt-5">
-              {stay} Dias / {stay - 1} Noches
-            </span>
-            <p> {desc} </p>
+            { stay_time ? <span className="stay mt-5">{stay_time} Dias / {stay_time - 1} Noches</span> : <span className="stay mt-5">{transshipment} Dias</span> }
+            <p> {description} </p>
             <span> <StarRating rating={rating} /> </span>
             <p> Desde ${price} </p>
             <div>
-              <ItemCounter stock={disp} initial={count} people={people} setCount={onAdd} />
+              <ItemCounter initial={count} people={stock} setCount={onAdd} />
             </div>
           </div>
           <div>
-            <Link to={`/process/${id}/${count}`} className="text-decoration-none">
+            <Link to={`/process/${_id}/${count}`} className="text-decoration-none">
               <button className="btn btn-lg btn-primary">Contactarme</button>
             </Link>
           </div>

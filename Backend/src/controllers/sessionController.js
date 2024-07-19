@@ -5,20 +5,19 @@ import { userModel } from '../models/user.js';
 import { validateHash, createHash } from "../utils/bcrypt.js";
 import { generateToken, verifyToken } from "../utils/jwt.js";
 import varenv from "../dotenv.js";
-import { tr } from "@faker-js/faker";
 
 export const login = async (req, res) => {
      try {
           const { email, password } = req.body;
           if (!email || !password) {
-               res.status(400).send({ message: 'Error faltan ingresar datos.' });
+               res.send({ status: 400, message: 'Error faltan ingresar datos.' });
           }
           const user = await userModel.findOne({ email: email });
           if (!user) {
-               res.status(401).send({ message: 'El usuario no existe!' });
+               res.send({ status: 401, message: 'El usuario no existe!' });
           }
           if (!validateHash(password, user.password)) {
-               res.status(401).send({ message: 'Contraseña incorrecta!' });
+               res.send({ status: 401, message: 'Contraseña incorrecta!' });
           }
           
           req.session.user = {
@@ -31,7 +30,8 @@ export const login = async (req, res) => {
           const userToken = generateToken(req.session.user);
           console.log("Usuario Logeado: ", req.session.user)
           //console.log("Usuario: ", user, "\nToken: ", userToken)
-          res.status(200).cookie('coderCookie', userToken, { maxAge: 3600000 }).send({ message: 'Logueado correctamente', user: req.session.user, token: userToken});
+          res.cookie('coderCookie', userToken, { maxAge: 600000, httpOnly: true, sameSite: 'lax' });
+          res.send({ status: 200, message: 'Logueado correctamente', user: req.session.user});
           
      } catch (error) {
           res.status(500).send({ message: 'Error al loguearse' + error });
@@ -49,9 +49,9 @@ export const githubSession = async (req, res) => {
 export const register = async (req, res) => {
      try {
           if (!req.user){
-               res.status(400).send({ message: 'Usuario ya existente en la aplicación' });
+               res.send({ status: 400, message: 'Usuario ya existente en la aplicación' });
           } else {
-               res.status(201).send({ message: 'Usuario creado correctamente', user: req.user });
+               res.send({ status: 201, message: 'Usuario creado correctamente', user: req.user });
           }
      } catch (error) {
           res.status(500).send({ message: 'Error al crear usuario'+ error});
@@ -62,29 +62,34 @@ export const current = async (req, res) => {
      try {
           const cookie = req.cookies['coderCookie']
           //console.log(cookie)
+          if (!cookie) {
+               return res.send({ status: 401, message: 'No hay usuario logueado' });
+          } 
           const user = verifyToken(cookie).user;
-          console.log("Usuario Logeado: ", user.email)
+          //console.log("Usuario Logeado: ", user.email)
           if (user)
-               return res.send({ message: 'Usuario logeado:', user: user });
+               return res.send({ status: 200, message: 'Usuario logeado:', user: user });
           if (req.session.user) {
-               res.status(200).send({ message: 'Usuario logeado:', user: req.session.user });
-          } else {
-               res.status(401).send({ message: 'No hay usuario logueado' });
+               res.send({ status: 200, message: 'Usuario logeado:', user: req.session.user });
           }
      } catch (error) {
+          console.log("Error al obtener usuario logueado: ", error);
           res.status(500).send({ message: 'Error al obtener usuario logueado' + error });
      }
 }
 
 export const logout = async (req, res) => {
      try {
+          if (!req.session.user || !req.session.user.email) {
+               return res.status(400).send({ message: 'No se encontró información de sesión' });
+          }
           const user = await userModel.findOne({ email: req.session.user.email });
           user.last_connection = new Date();
           await user.save();
           res.clearCookie('coderCookie');
           console.log("Usuario Deslogueado: ", req.session.user.email)
           req.session.destroy((error =>
-               error ? res.status(500).send({ message: 'Error al cerrar la sesion' }) : res.status(200).redirect('/')
+               error ? res.status(500).send({ message: 'Error al cerrar la sesion' }) : res.send({ status: 200, message: 'Sesion cerrada correctamente' })
           ));
      } catch (error) {
           res.status(500).send({ message: 'Error al cerrar la sesion, verifique que haya sesion iniciada' });

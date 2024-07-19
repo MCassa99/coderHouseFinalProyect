@@ -1,13 +1,13 @@
 import "./App.scss"; // Se importan estilos de scss
 import React, { useEffect, useState } from "react"; // Se importa useState
-import { BrowserRouter, Routes, Route } from "react-router-dom"; // Se importan las rutas
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom"; // Se importan las rutas
 import Home from "./components/Hero/Hero.jsx"; // Se importa el componente Home
 import ItemListContainer from "./components/ItemListContainer/ItemListContainer.jsx"; // Se importa el componente ItemListContainer
 import NavbarComponent from "./components/Navbar/Navbar.jsx"; // Se importa el componente Navbar
 import Error from "./components/Error/Error.jsx"; // Se importa el componente Error
 import ProductDetailContainer from "./components/ItemDetailContainer/ItemDetailContainer.jsx";
 import ProcessPurchase from "./components/ProcessPurchase/ProcessPurchase.jsx";
-import Cart from "./components/Cart/Cart.jsx"
+import Cart from "./components/Cart/Cart.jsx";
 import CartProvider from "./components/CartContext/CartContext.jsx";
 import CheckOut from "./components/CheckOut/CheckOut.jsx";
 import UserSettings from "./components/User/UserSettings.jsx";
@@ -17,30 +17,28 @@ function App() {
   const [login, setLogin] = useState(false);
 
   useEffect(() => {
-    fetch("/api/session/current", {
+    fetch("http://localhost:3000/api/session/current", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: 'include'
     })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.message === "Usuario logeado:") {
-          setLogin(true);
-        }
-      });
+    .then((res) => res.json())
+    .then((res) => {
+      if (res.status === 200) {
+        setLogin(true); // Si hay un usuario logeado se setea login en true
+      } else {
+        setLogin(false); // Si no hay un usuario logeado se setea login en false
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   }, []);
-  
-  if (login) {
-    console.log("Usuario logeado");
-  } else {
-    console.log("Usuario no logeado");
-  }
-  
+
   return (
-    !login ? // Si no hay login se renderiza el componente Login
-      <Login />
-    :
+    login ? // Si hay un usuario logeado
     // Se renderiza el componente App
     <div className="App">
       <div className="bg">
@@ -49,6 +47,7 @@ function App() {
             <NavbarComponent />
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
               <Route path="/travelvip" element={<ItemListContainer />} />
               <Route path="/category/:id" element={<ItemListContainer />} />
               <Route path="/destino/:id" element={<ProductDetailContainer />} />
@@ -59,7 +58,7 @@ function App() {
               <Route path="/checkout" element={<CheckOut />} />
               <Route path="/profile/:id" element={<UserSettings />} />
               <Route path="/settings/:id" element={<UserSettings />} />
-              <Route path="/logout" element={<Error />} />
+              <Route path="/logout" element={<LogoutHandler setLogin={setLogin} />} />
               <Route path="/error/:id" element={<Error />} />
               <Route path="*" element={<Error />} />
             </Routes>
@@ -67,7 +66,36 @@ function App() {
         </BrowserRouter>
       </div>
     </div>
+    : // Si no hay un usuario logeado
+    // Se renderiza el componente Login
+    <Login setLogin={setLogin} />
   );
 }
+
+const LogoutHandler = ({ setLogin }) => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch("http://localhost:3000/api/session/logout", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: 'include'
+    })
+    .then((res) => res.json())
+    .then((res) => {
+      if (res.status === 200) {
+        setLogin(false); // Si no hay un usuario logeado se setea login en false
+        navigate("/login"); // Redirigir a la página de login
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }, [navigate, setLogin]);
+
+  return null; // No renderiza nada, solo ejecuta el logout
+};
 
 export default App;

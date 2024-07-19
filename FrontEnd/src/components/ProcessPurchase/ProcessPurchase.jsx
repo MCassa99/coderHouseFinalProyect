@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import wppLogo from '../../assets/WhatsApp_icon.webp'
 import agentLogo from '../../assets/Agent_icon.png'
@@ -12,22 +12,31 @@ const ProcessPurchase = () => {
 
     const [product, setProduct] = useState([]);
     const { id, qty } = useParams();
-
-    if (qty > product.people) {
-        window.location.href = `/error/123`;
-    }
+    const navigate = useNavigate();
 
     useEffect(() => {
+        fetch(`http://localhost:3000/api/products/${id}`)
+            .then(response => response.json())
+            .then(data => setProduct(data))
+            .catch(error => <Error />)
+        console.log(product)
+    }, [id])
+
+    if (qty > product.stock) {
+        navigate('/error/410')
+    }
+
+    /*useEffect(() => {
         const queryDB = getFirestore();
         const queryDoc = doc(queryDB, 'destino', id);
         getDoc(queryDoc).then((response) => {
             setProduct({id: response.id, ...response.data()});
         });
-    }, [id]);
+    }, [id]);*/
 
     let botonWpp = () => {
         // LO QUE HARIA PARA QUE EL OPERADOR TE HABILITE LA COMPRA AL CARRITO
-        let mensaje = `Hola TravelVIP ! Me contacto porque queria averiguar por una cotizacion a ${product.title}  por la cantidad de ${product.stay} dias. Muchas Gracias!`;
+        let mensaje = `Hola TravelVIP ! Me contacto porque queria averiguar por una cotizacion a ${product.title}  por la cantidad de ${product.category === 'hoteles' ? product.stay_time : product.transshipment} dias. Muchas Gracias!`;
         let telefono = "+59896327431";
         let url = `https://api.whatsapp.com/send?phone=${telefono}&text=${mensaje}&source=&data=`;
         window.open(url, "_blank", "noreferrer");

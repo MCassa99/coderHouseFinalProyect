@@ -121,10 +121,11 @@ export const deleteProductFromCart = async (res, req) => {
           const index = cart.products.findIndex(product => product.id_prod._id == productID);
           if (index != -1) {
                cart.products.splice(index, 1);
-          }
-          const deletedCart = await cartModel.findByIdAndUpdate(cartID, cart);
-
-          return res.status(200).send(deletedCart);
+               const deletedCart = await cartModel.findByIdAndUpdate(cartID, cart);
+               return res.status(200).send(deletedCart);         
+          } else {
+               return res.status(404).send('Producto no encontrado en el carrito');
+          }          
      } catch (error) {
           return res.status(500).send('Error interno del servidor al eliminar el producto' + error);
      }

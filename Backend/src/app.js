@@ -23,9 +23,10 @@ const PORT = 3000;
 
 //Cors
 const corsOptions = {
-    origin: '*',
+    origin: 'http://localhost:5173',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
 };
 app.use(cors(corsOptions));
 
@@ -54,12 +55,17 @@ app.use(compression({
 
 app.use(session({
     secret: varenv.sessionSecret,
-    resave: true,
+    resave: false,
     saveUninitialized: true,
     store: MongoStore.create({ 
         mongoUrl: varenv.mongodb,
         ttl: 600, // 10 minutos
-    })
+    }),
+    cookie: {
+        httpOnly: true,
+        secure: false, // Cambia esto a true si estás usando HTTPS
+        sameSite: 'lax' // Esto permite cookies en solicitudes de diferentes orígenes
+    }
 }));
 
 //Passport

@@ -22,7 +22,7 @@ const ItemCounter = ({ initial, stock, people, setCount }) => {
       <button className="btn btn-danger btn-number" disabled={initial <= 1} onClick={decrease}>
         <TiMinus />
       </button>
-      <div className="d-inline p-2 border border-white rounded mx-2">
+      <div className="d-inline p-2 border border-white rounded px-5 mx-2">
         <IoPersonAddSharp />
         <span>
           {initial} / {people}{" "}

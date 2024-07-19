@@ -12,7 +12,7 @@ const sessionRouter = Router();
 ESO GENERA LO MISMO QUE CURRENT POR LO QUE SE DEBE ELIMINAR
 */
 //Agregar session
-sessionRouter.get('/login', passport.authenticate('login'), login );
+sessionRouter.post('/login', passport.authenticate('login'), login );
 
 // Login form route
 sessionRouter.get('/loginForm', (req, res) => {

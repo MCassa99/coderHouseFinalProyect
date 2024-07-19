@@ -14,6 +14,11 @@ const GITHUB_CALLBACK_URL = "http://localhost:3000/api/session/githubSession";
 //Configuración de passport con uno o mas Middleware
 const localStrategy = local.Strategy;
 
+const localOffset = 0 * 60; // Offset for GMT-3 in minutes
+const now = new Date();
+const localDate = new Date(now.getTime() + (localOffset - now.getTimezoneOffset()) * 60000);
+
+
 const initializePassport = () => {
     //Defino las rutas que se aplican mis estrategias
     passport.use('register', new localStrategy({ passReqToCallback: true, usernameField: 'email' }, async (req, username, password, done) => {
@@ -46,7 +51,7 @@ const initializePassport = () => {
         try {
             const user = await userModel.findOne({ email: username })
             if (user && validateHash(password, user.password)) {
-                user.last_connection = new Date();
+                user.last_connection = localDate;
                 await user.save();
                 return done(null, user)
             } else {

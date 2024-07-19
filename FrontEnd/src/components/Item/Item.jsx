@@ -26,7 +26,7 @@ const Item = ({ destino }) => {
   return (
     // Si el status es false, no se muestra el destino
     status === false ? null :
-    <Link to={`api/products/${_id}`} className="text-decoration-none">
+    <Link to={`/destino/${_id}`} className="text-decoration-none">
       <div
         className="card round-5"
         onMouseOver={handleMouseOver}
