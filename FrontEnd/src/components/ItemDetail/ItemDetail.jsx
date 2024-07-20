@@ -1,27 +1,92 @@
 import styled from "styled-components";
 import StarRating from "../Item/StarRating";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ItemCounter from "./ItemCounter/ItemCounter";
 
 
-const ProductDetail = ({ destino, children }) => {
+const ProductDetail = ({ destino }) => {
 
   // Declarar todas las constantes fuera del bloque if
   let _id, title, description, price, thumbnail, category, status, code, stock, transshipment, stay_time, rating, image;
 
   // Asignar valores en función de la categoría
   if (destino.category === 'vuelos') {
-    ({ _id, title, description, price, thumbnail, category, status, code, stock, transshipment, rating, image } = destino);
+    ({ _id, title, description, price, thumbnail, category, status, code, transshipment, rating, image, stock } = destino);
+  } else if (destino.category === 'hoteles') {
+    ({ _id, title, description, price, thumbnail, category, status, code, stay_time, rating, image, stock } = destino);
   } else {
-    ({ _id, title, description, price, thumbnail, category, status, code, stock, stay_time, rating, image } = destino);
+    ({ _id, title, description, price, thumbnail, category, status, code, transshipment, stay_time, rating, image, stock } = destino);
   }
+
   const [count, setCount] = useState(1);
+  const [user, setUser] = useState('User');
+
+  useEffect(() => {
+    fetch(`http://localhost:3000/api/session/current`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: 'include'
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.status === 200) {
+          setUser(res.user.role);
+        } else {
+          setUser('User');
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   function onAdd(count) {
     setCount(count);
   }
+
+  const handleDeleteProduct = () => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:3000/api/products/${_id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          }
+        })
+          .then((res) => res.json())
+          .then((res) => {
+            res.status === 200 ?
+              Swal.fire({
+                title: 'Product Deleted',
+                text: res.message,
+                icon: 'success'
+              }).then(() => window.location.href = '/travelvip')
+              :
+              Swal.fire({
+                title: 'Error',
+                text: res.message,
+                icon: 'error'
+              });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    });
+  };
 
   return (
     <>
@@ -32,18 +97,31 @@ const ProductDetail = ({ destino, children }) => {
         <div className="content" style={{ marginTop: 6 + 'rem' }}>
           <div className="title">
             <h1 className="mb-3">{title}</h1>
-            { stay_time ? <span className="stay mt-5">{stay_time} Dias / {stay_time - 1} Noches</span> : <span className="stay mt-5">{transshipment} Dias</span> }
-            <p> {description} </p>
+            {category === 'hoteles' ? <span className="fw-bolder">{stay_time} Dias / {stay_time - 1} Noches de Hospedaje</span> : category === 'vuelos' ? <span className="fw-bolder">{transshipment} Dias de Vuelo</span> : <div> <span className="fw-bolder">{stay_time} Dias / {stay_time - 1} Noches de Hospedaje</span> <span className="fw-bolder">{transshipment} Dias de Vuelo</span> </div>}
+            <p className="mt-3"> {description} </p>
             <span> <StarRating rating={rating} /> </span>
             <p> Desde ${price} </p>
-            <div>
-              <ItemCounter initial={count} people={stock} setCount={onAdd} />
-            </div>
+            {user === 'User' ?
+              <div>
+                <ItemCounter initial={count} people={stock} setCount={onAdd} />
+              </div>
+              :
+              null
+            }
           </div>
           <div>
-            <Link to={`/process/${_id}/${count}`} className="text-decoration-none">
-              <button className="btn btn-lg btn-primary">Contactarme</button>
-            </Link>
+            {user === 'User' ?
+              <Link to={`/process/${_id}/${count}`} className="text-decoration-none">
+                <button className="btn btn-lg btn-primary">Contactarme</button>
+              </Link>
+              :
+              <div>
+                <Link to={`/updateProduct/${_id}`} className="text-decoration-none row">
+                  <button className="btn btn-lg btn-primary">Actualizar Producto</button>
+                </Link>
+                <button type="button" className="btn btn-lg btn-danger mt-3 row" onClick={handleDeleteProduct}>Delete Product</button>
+              </div>
+            }
           </div>
         </div>
       </Section>

@@ -12,12 +12,16 @@ import CartProvider from "./components/CartContext/CartContext.jsx";
 import CheckOut from "./components/CheckOut/CheckOut.jsx";
 import UserSettings from "./components/User/UserSettings.jsx";
 import Login from "./components/Login/Login.jsx";
+import ResetPassword from "./components/ResetPassword/ResetPassword.jsx";
+import AddProduct from "./components/AddProduct/AddProduct.jsx";
 
 function App() {
   const [login, setLogin] = useState(false);
+  const [role, setRole] = useState('User');
+  const [id, setID] = useState('');
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/session/current", {
+    fetch(`http://localhost:3000/api/session/current`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -27,9 +31,12 @@ function App() {
     .then((res) => res.json())
     .then((res) => {
       if (res.status === 200) {
+        setRole(res.user.role); // Se setea el usuario
+        setID(res.user._id); // Se setea el id del usuario
         setLogin(true); // Si hay un usuario logeado se setea login en true
       } else {
         setLogin(false); // Si no hay un usuario logeado se setea login en false
+        if (window.location.pathname !== "/login") window.location.replace(`http://localhost:5173/login`);
       }
     })
     .catch((error) => {
@@ -38,22 +45,30 @@ function App() {
   }, []);
 
   return (
-    login ? // Si hay un usuario logeado
     // Se renderiza el componente App
     <div className="App">
       <div className="bg">
         <BrowserRouter>
           <CartProvider>
-            <NavbarComponent />
+            <NavbarComponent role={ role } id={ id } />
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
+              <Route path="/login" element={<Login setLogin={ setLogin } />} />
               <Route path="/travelvip" element={<ItemListContainer />} />
-              <Route path="/category/:id" element={<ItemListContainer />} />
+              <Route path="/category/:id" element={<ItemListContainer user={ role } />} />
+              { role === 'Admin' ?
+                <>
+                <Route path="/addProduct" element={<AddProduct />} />
+                <Route path="/updateProduct/:id" element={<AddProduct />} />
+                <Route path="/cotizador" element={<Error />} />
+                </>
+                :
+                null
+              }
               <Route path="/destino/:id" element={<ProductDetailContainer />} />
               <Route path="/process/:id" element={<ProcessPurchase />} />
               <Route path="/process/:id/:qty" element={<ProcessPurchase />} />
-              <Route path="/cotizador" element={<Error />} />
+              <Route path="/resetPassword/:token/success" element={<ResetPassword />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<CheckOut />} />
               <Route path="/profile/:id" element={<UserSettings />} />
@@ -66,15 +81,11 @@ function App() {
         </BrowserRouter>
       </div>
     </div>
-    : // Si no hay un usuario logeado
-    // Se renderiza el componente Login
-    <Login setLogin={setLogin} />
   );
 }
 
 const LogoutHandler = ({ setLogin }) => {
   const navigate = useNavigate();
-
   useEffect(() => {
     fetch("http://localhost:3000/api/session/logout", {
       method: "GET",

@@ -10,8 +10,10 @@ $alternative: #006494;
   font-weight: bold;
 }
 
-.navprop{
-  &:hover, &:active &:focus{
+.navprop {
+  &:hover,
+  &:active,
+  &:focus {
     color: $secondary;
   }
   color: $secondary;
@@ -37,12 +39,14 @@ html {
   height: 100%;
 }
 
-.navbar{
+.navbar {
   background-color: $alternative;
   color: $secondary;
 }
 
-.greeting, .cart, .navbutton{
+.greeting,
+.cart,
+.navbutton {
   color: $secondary;
 }
 
@@ -51,18 +55,22 @@ html {
 //////////////////////////////
 
 .stay {
-  position: relative;
-  top: -.8rem;
-  left: 1rem;
+  position: absolute; /* Cambiado de relative a absolute */
+  top: 10px; /* Ajusta según sea necesario */
+  left: 10px; /* Ajusta según sea necesario */
   background-color: $alternative;
   width: fit-content;
-  padding: .2rem;
-  padding-left: .5rem;
-  padding-right: .5rem;
-  border-radius: .5rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.5rem;
   font-weight: 700;
   font-size: small;
   color: $secondary;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .card-img-top {
@@ -84,17 +92,16 @@ html {
   -ms-user-select: none;
 }
 
-.detail-img {
-  min-height: 75vh;
-  max-height: 75vh;
-  background-size: 100vw;
+.card-body {
+  flex-grow: 1;
 }
 
-.card-footer{
-  margin-top: -1rem;
+.card-footer {
+  margin-top: auto;
+  text-align: center;
 }
 
-.hoverProduct{
+.hoverProduct {
   background-color: $alternative;
   color: $secondary;
 }
@@ -103,7 +110,7 @@ html {
 //    DETAILS CARD  SCSS    //
 //////////////////////////////
 
-.price{
+.price {
   font-family: 'Tahoma';
   font-weight: 700;
   font-size: x-large;
@@ -115,55 +122,53 @@ html {
   font-weight: 600;
   background-color: $alternative;
   width: fit-content;
-  padding: .2rem;
-  padding-left: .5rem;
-  padding-right: .5rem;
+  padding: .2rem .5rem;
   border-radius: .5rem;
   color: $secondary;
 }
 
-.Regisha-3{
+.Regisha-3 {
   font-family: "Regisha";
   font-size: 3rem;
 }
 
-.Regisha-6{
+.Regisha-6 {
   font-family: "Regisha";
   font-size: 6rem;
 }
 
-.color-s{
+.color-s {
   color: $secondary;
 }
 
-.description{
+.description {
   margin-top: -1rem;
 }
 
-.product-content{
+.product-content {
   padding: 5rem;
   padding-top: 10rem;
 }
 
-.relevant-content{
+.relevant-content {
   color: #000;
 }
 
-.background-details{
+.background-details {
   height: calc(100vh - 4.2rem);
   background-color: $primary;
 }
 
-.cart-text{
+.cart-text {
   margin-top: -1rem;
 }
 
-.cart-card{
+.cart-card {
   z-index: 0;
   position: relative;
 }
 
-.cart-button{
+.cart-button {
   z-index: 1;
   position: relative;
   border-radius: 50%;

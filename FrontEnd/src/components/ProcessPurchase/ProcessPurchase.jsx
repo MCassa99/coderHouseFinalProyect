@@ -8,25 +8,63 @@ import CartPassangerForm from '../CartPassengerForm/CartPassengerForm';
 
 const ProcessPurchase = () => {
 
-    const { addToCart } = useCartContext();
-
+    //const { addToCart } = useCartContext();
     const [product, setProduct] = useState([]);
+    const [ user, setUser ] = useState([]);
+
     const { id, qty } = useParams();
-    const navigate = useNavigate();
 
     useEffect(() => {
         fetch(`http://localhost:3000/api/products/${id}`)
             .then(response => response.json())
             .then(data => setProduct(data))
-            .catch(error => <Error />)
-        console.log(product)
     }, [id])
 
-    if (qty > product.stock) {
+    useEffect(() => {
+        fetch(`http://localhost:3000/api/session/current`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include'
+        })
+        .then((res) => res.json())
+        .then((res) => {
+            if (res.status === 200) {
+                setUser(res.user);
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }, []);
+
+    const handlePunchase = () => {
+        console.log(user)
+        fetch(`http://localhost:3000/api/cart/${user.cart_id}/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                quantity: qty
+            })
+        })
+        .then(response => console.log(response))
+        .then(data => {
+            if (data.status === 200) {
+                console.log(data.message);
+            } else {
+                console.log(data.message);
+            }
+        }
+    )}
+
+    /*if (qty > product.stock) {
         navigate('/error/410')
     }
 
-    /*useEffect(() => {
+    useEffect(() => {
         const queryDB = getFirestore();
         const queryDoc = doc(queryDB, 'destino', id);
         getDoc(queryDoc).then((response) => {
@@ -36,13 +74,13 @@ const ProcessPurchase = () => {
 
     let botonWpp = () => {
         // LO QUE HARIA PARA QUE EL OPERADOR TE HABILITE LA COMPRA AL CARRITO
-        let mensaje = `Hola TravelVIP ! Me contacto porque queria averiguar por una cotizacion a ${product.title}  por la cantidad de ${product.category === 'hoteles' ? product.stay_time : product.transshipment} dias. Muchas Gracias!`;
+        let mensaje = `Hola TravelVIP ! Me contacto porque queria averiguar por una cotizacion a ${product.title}  por la cantidad de ${product.category === 'hoteles' ? product.stay_time : product.transshipmentbi} dias. Muchas Gracias!`;
         let telefono = "+59896327431";
         let url = `https://api.whatsapp.com/send?phone=${telefono}&text=${mensaje}&source=&data=`;
         window.open(url, "_blank", "noreferrer");
     }
 
-    let information = [];
+    /*let information = [];
 
     function renderinfo() {
         for (let i = 0; i < qty; i++) {
@@ -65,6 +103,7 @@ const ProcessPurchase = () => {
             information.push(pasajero);
         }
     }
+    */
 
     return (
         <div>
@@ -79,16 +118,18 @@ const ProcessPurchase = () => {
                 <div className='d-flex flex-column justify-content-center align-items-center'>
                     <span>Validar Destino</span>
                     <span className='mb-3'><strong>(*Este paso lo dara el Agente luego de concretar todo por WhatsApp*)</strong></span>
+                    <span className='mb-3'><strong>(*Para una demostracion solamente se ingresaran los datos de este usuario para todos los tickets*)</strong></span>
+
                     {/* <span className='mb-3'><strong>Una vez validado el destino, se habilitara el boton para agregar al carrito</strong></span> */}
                     <div className='d-flex flex-column justify-content-start mb-4'>
                         {Array.from({ length: qty ? qty : 1 }, (_, index) => (
                             <div key={index}>
-                                <h5>Pasajero {index+1}</h5>
-                                <CartPassangerForm id={index+1}/>
+                                <h5 className='text-center'>Pasajero {index+1}</h5>
+                                <CartPassangerForm userInfo={ user }/>
                             </div>
                         ))}
                     </div>
-                    <button className='btn btn-primary mb-4' onClick={() => {renderinfo(), addToCart({product},qty,information)}}><img style={{ width: 40, marginRight: 10 }} src={agentLogo} /><strong>Habilitar Destino</strong></button>
+                    <button className='btn btn-primary mb-4' onClick={handlePunchase}><img style={{ width: 40, marginRight: 10 }} src={agentLogo} /><strong>Habilitar Destino</strong></button>
                 </div>
             </div>
             <div>

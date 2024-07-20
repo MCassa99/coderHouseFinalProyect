@@ -13,3 +13,7 @@
      background: red;
      border-radius: 9px;
 }
+
+.point{
+     cursor: pointer;
+}

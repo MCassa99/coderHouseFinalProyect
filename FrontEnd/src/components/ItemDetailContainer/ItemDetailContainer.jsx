@@ -12,9 +12,8 @@ const ProductDetailContainer = () => {
     useEffect(() => {
         fetch(`http://localhost:3000/api/products/${id}`)
             .then(response => response.json())
-            .then(data => setProduct(data))
+            .then(data => setProduct(data   ))
             .catch(error => <Error />)
-        console.log(product)
     }, [id])
 
     return (

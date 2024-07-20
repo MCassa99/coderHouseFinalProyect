@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import './Login.css';
-import email_icon from '../../assets/email.png';
-import password_icon from '../../assets/password.png';
 import Swal from "sweetalert2";
-import Cookies from 'js-cookie';
 
 const Login = ({ setLogin }) => {
      const [action, setAction] = useState('Login');
@@ -22,7 +19,7 @@ const Login = ({ setLogin }) => {
      const handleLogin = (event) => {
           event.preventDefault(); // Prevent default form submission
 
-          fetch('http://localhost:3000/api/session/login', {
+          fetch(`http://localhost:3000/api/session/login`, {
                method: 'POST',
                headers: {
                     'Content-Type': 'application/json'
@@ -99,9 +96,53 @@ const Login = ({ setLogin }) => {
           }
      }
 
+     const handleForgotPassword = () => {
+          Swal.fire({
+               title: "Forgot Password",
+               html: '<input id="swal-input1" class="swal2-input" placeholder="Enter your email">',
+               showCancelButton: true,
+               confirmButtonText: 'Send',
+               preConfirm: () => {
+                    const email = Swal.getPopup().querySelector('#swal-input1').value;
+                    if (!email) {
+                         Swal.showValidationMessage('Email is required');
+                    }
+                    return { email: email }
+               }
+          }).then((result) => {
+               if (result.isConfirmed) {
+                    fetch('http://localhost:3000/api/session/changePassword', {
+                         method: 'POST',
+                         headers: {
+                              'Content-Type': 'application/json'
+                         },
+                         body: JSON.stringify({
+                              email: result.value.email
+                         })
+                    })
+                         .then(response => response.json())
+                         .then(data => {
+                              if (data.status === 200) {
+                                   Swal.fire({
+                                        title: "Verification email send, please check your inbox!",
+                                        text: data.message,
+                                        icon: "success",
+                                   });
+                              } else {
+                                   Swal.fire({
+                                        title: "Verification email could not be send! Please try again.",
+                                        text: data.message,
+                                        icon: "error",
+                                   });
+                              }
+                         })
+               }
+          })
+     }
+
      return (
           <div className="d-flex justify-content-center align-items-center vh-100 bg-primary">
-               <div className="card p-4 w-50 rounded-5">
+               <div className="card p-4 w-50 rounded-5 ">
                     <div className="card-body">
                          <h3 className="card-title text-center header">{action}</h3>
                          <div className="underline"></div>
@@ -139,7 +180,7 @@ const Login = ({ setLogin }) => {
                                    <input type="password" className="form-control" id="password" placeholder="Password" required />
                               </div>
                               <div className="mb-3">
-                                   <p>Forgot Password? <a href="#" className="text-primary">Click Here</a></p>
+                                   <p>Forgot Password? <i className="text-primary text-decoration-underline point" onClick={handleForgotPassword}>Click Here</i></p>
                               </div>
                               <button type="submit" className='btn btn-primary w-100 mb-2'>{action === 'Login' ? 'Login' : 'Sign Up' }</button>
                               <button type="button" className='btn btn-light w-100' onClick={() => { setAction(action === 'Sign Up' ? 'Login' : 'Sign Up') }}>

@@ -3,7 +3,7 @@ import ItemList from '../ItemList/ItemList'
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
-const ItemListContainer = ({greeting}) => {
+const ItemListContainer = ({ user }) => {
 
     const [product, setProduct] = useState([]);
     const { id } = useParams();
@@ -42,10 +42,10 @@ const ItemListContainer = ({greeting}) => {
     return (
         <div>
             <div className='d-flex align-items-center justify-content-center'>
-                <h2 className='greeting'>{greeting}</h2>
+                <h2 className='greeting'></h2>
             </div>
             <div>
-                <ItemList product={product} />
+                <ItemList product={product} id={id ? user === 'Admin' ? true : false : false}/>
             </div>
         </div>
     )

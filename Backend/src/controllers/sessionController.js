@@ -66,12 +66,11 @@ export const current = async (req, res) => {
                return res.send({ status: 401, message: 'No hay usuario logueado' });
           } 
           const user = verifyToken(cookie).user;
+          const validatedUser = user ? user : req.session.user;
           //console.log("Usuario Logeado: ", user.email)
-          if (user)
-               return res.send({ status: 200, message: 'Usuario logeado:', user: user });
-          if (req.session.user) {
-               res.send({ status: 200, message: 'Usuario logeado:', user: req.session.user });
-          }
+          const userInfo = await userModel.findOne({ email: validatedUser.email });
+          res.send({ status: 200, message: 'Usuario logeado:', user: userInfo });
+
      } catch (error) {
           console.log("Error al obtener usuario logueado: ", error);
           res.status(500).send({ message: 'Error al obtener usuario logueado' + error });
@@ -106,17 +105,18 @@ export const testJWT = async (req, res) => {
 
 export const sendPasswordChanger = async (req, res) => {
      try {
+          const frontendLink = 'localhost:5173';
           const { email } = req.body;
           const user = await userModel.find({ email: email })
           if (user) {
                const token = jwt.sign({ userEmail: email }, varenv.emailRecovery, { expiresIn: '1h' })
-               const resetLink = `http://localhost:3000/api/session/resetPassword/${token}`;
+               const resetLink = `http://${frontendLink}/resetPassword/${token}`;
                sendEmailChangePassword(email, resetLink);
-               res.status(200).send('Se envio un mail para cambiar la contraseña')
+               res.send({ status: 200, message: 'Se envio un mail para cambiar la contraseña' })
           } else
-               res.status(404).send('Usuario no encontrado');
+               res.send({ status: 404, message:'Usuario no encontrado' });
      } catch (error) {
-          res.status(500).send('Error al cambiar la contraseña: ', error);
+          res.send({ status: 500, message: 'Error al enviar mail de cambio de contraseña' + error });
      }
 }
 
@@ -131,15 +131,15 @@ export const resetPassword = async (req, res) => {
                     const hashPassword = createHash(newPassword);
                     user.password = hashPassword;
                     await userModel.findByIdAndUpdate(user._id, user);
-                    res.status(200).send('Contraseña cambiada correctamente');
+                    res.send({ status: 200, message: 'Contraseña cambiada correctamente' });
                } else {
-                    res.status(400).send('La contraseña es igual a la anterior');
+                    res.send({ status: 400, message: 'La contraseña es igual a la anterior' });
                }
           } else {
-               res.status(404).send('Usuario no encontrado');
+               res.send({ status: 404, message: 'Usuario no encontrado' });
           }
      } catch (error) {
-          res.status(500).send('Error al cambiar la contraseña: ', error);
+          res.send(status(500).send({ message: 'Error al cambiar la contraseña' + error }));
      }
 }
 
