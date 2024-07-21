@@ -28,10 +28,12 @@ const   NavbarComponent = ({ role, id }) => {
                             : null }
                         </Nav>
                         <Nav>
+                            { role !== 'Admin' ? 
                             <LinkContainer to="/cart"><Nav.Link className='cart d-flex align-items-center justify-content-center'><CartWidget /></Nav.Link></LinkContainer>
+                            : null }
                             <NavDropdown title={<img src={UserProfile} alt="User Profile" style={{ width: 35, height: 35, marginRight: 1}} />} id="user-dropdown">
                                 <NavDropdown.Item><LinkContainer to={`/profile/${id}`}><Nav.Link>Perfil</Nav.Link></LinkContainer></NavDropdown.Item>
-                                <NavDropdown.Item><LinkContainer to='/settings/'><Nav.Link>Ajustes</Nav.Link></LinkContainer></NavDropdown.Item>
+                                <NavDropdown.Item><LinkContainer to={`/settings/${id}`}><Nav.Link>Ajustes</Nav.Link></LinkContainer></NavDropdown.Item>
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item><LinkContainer to='/logout'><Nav.Link>Cerrar Sesión</Nav.Link></LinkContainer></NavDropdown.Item>
                             </NavDropdown>
