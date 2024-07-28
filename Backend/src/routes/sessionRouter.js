@@ -1,6 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
-import { login, githubSession, register, current, logout, testJWT, sendPasswordChanger, resetPassword, deleteUser } from "../controllers/sessionController.js";
+import { login, githubSession, register, current, logout, testJWT, sendPasswordChanger, resetPassword, deleteUser, validatePassword } from "../controllers/sessionController.js";
 
 const sessionRouter = Router();
 
@@ -30,6 +30,8 @@ sessionRouter.post('/register', passport.authenticate('register'), register );
 sessionRouter.get('/logout', logout );
 
 sessionRouter.get('/testJWT', passport.authenticate('jwt', { session: false }), testJWT);
+
+sessionRouter.post('/validatePassword', validatePassword);
 
 sessionRouter.post('/changePassword', sendPasswordChanger);
 

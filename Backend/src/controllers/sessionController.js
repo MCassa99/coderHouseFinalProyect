@@ -30,7 +30,7 @@ export const login = async (req, res) => {
           const userToken = generateToken(req.session.user);
           console.log("Usuario Logeado: ", req.session.user)
           //console.log("Usuario: ", user, "\nToken: ", userToken)
-          res.cookie('coderCookie', userToken, { maxAge: 600000, httpOnly: true, sameSite: 'lax' });
+          res.cookie('coderCookie', userToken, { maxAge: 3600000, httpOnly: true, sameSite: 'lax' });
           res.send({ status: 200, message: 'Logueado correctamente', user: req.session.user});
           
      } catch (error) {
@@ -79,8 +79,10 @@ export const current = async (req, res) => {
 
 export const logout = async (req, res) => {
      try {
-          if (!req.session.user || !req.session.user.email) {
-               return res.status(400).send({ message: 'No se encontró información de sesión' });
+          if (req.cookies['coderCookie'] != null)
+               res.clearCookie('coderCookie');
+          if (!req.session.user.email) {
+               return res.send({ status: 400, message: 'No se encontró información de sesión' });
           }
           const user = await userModel.findOne({ email: req.session.user.email });
           user.last_connection = new Date();
@@ -88,7 +90,7 @@ export const logout = async (req, res) => {
           res.clearCookie('coderCookie');
           console.log("Usuario Deslogueado: ", req.session.user.email)
           req.session.destroy((error =>
-               error ? res.status(500).send({ message: 'Error al cerrar la sesion' }) : res.send({ status: 200, message: 'Sesion cerrada correctamente' })
+               error ? res.send({ status: 500, message: 'Error al cerrar la sesion' }) : res.send({ status: 200, message: 'Sesion cerrada correctamente' })
           ));
      } catch (error) {
           res.status(500).send({ message: 'Error al cerrar la sesion, verifique que haya sesion iniciada' });
@@ -117,6 +119,24 @@ export const sendPasswordChanger = async (req, res) => {
                res.send({ status: 404, message:'Usuario no encontrado' });
      } catch (error) {
           res.send({ status: 500, message: 'Error al enviar mail de cambio de contraseña' + error });
+     }
+}
+
+export const validatePassword = async (req, res) => {
+     const { email, password } = req.body;
+     try {
+          const user = await userModel.findOne({ email: email });
+          if (user) {
+               if (validateHash(password, user.password)) {
+                    res.send({ status: 200, message: 'Contraseña correcta' });
+               } else {
+                    res.send({ status: 400, message: 'Contraseña incorrecta' });
+               }
+          } else {
+               res.send({ status: 404, message: 'Usuario no encontrado' });
+          }
+     } catch (error) {
+          res.send({ status: 500, message: 'Error al validar contraseña' + error });
      }
 }
 

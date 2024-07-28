@@ -34,6 +34,20 @@ export default class User {
           }
      }
 
+     updateUser = async (id, user) => {
+          try {
+               if (user.password) {
+                   // Hash the password before saving
+                   user.password = await createHash(user.password);
+               }
+               const updatedUser = await userModel.findByIdAndUpdate(id, user, { new: true });
+               return updatedUser;
+           } catch (error) {
+               console.log("Error al actualizar usuario ", error);
+               return null;
+           }
+     }
+
      sendDocuments = async (uid, newDocuments) => {
           try {
                const user = await userModel.findByIdAndUpdate(uid, {

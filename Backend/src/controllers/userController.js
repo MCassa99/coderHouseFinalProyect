@@ -1,4 +1,3 @@
-import e from "express";
 import User from "../dao/classes/userDao.js";
 
 const userService = new User();
@@ -22,6 +21,15 @@ export const createUser = async (req, res) => {
      if (newUser == null) res.status(500).send("Error al crear usuario");
      else res.status(201).send(newUser);
 };
+
+export const updateUser = async (req, res) => {
+     const { id } = req.params;
+     const user = req.body;
+     const updatedUser = await userService.updateUser(id, user);
+     updatedUser == null ?
+     res.send({status: 500, message:"Error al actualizar usuario"}) :
+     res.send({status: 200, message: "Usuario actualizado correctamente"});
+}; 
 
 export const sendDocuments = async (req, res) => {
      const { uid } = req.params;

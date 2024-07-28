@@ -16,6 +16,7 @@ import ResetPassword from "./components/ResetPassword/ResetPassword.jsx";
 import AddProduct from "./components/AddProduct/AddProduct.jsx";
 
 function App() {
+  
   const [login, setLogin] = useState(false);
   const [role, setRole] = useState('User');
   const [id, setID] = useState('');
@@ -94,7 +95,6 @@ const LogoutHandler = ({ setLogin }) => {
       },
       credentials: 'include'
     })
-    .then((res) => res.json())
     .then((res) => {
       if (res.status === 200) {
         setLogin(false); // Si no hay un usuario logeado se setea login en false

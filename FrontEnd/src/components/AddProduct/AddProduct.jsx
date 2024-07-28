@@ -13,7 +13,10 @@ const AddProduct = () => {
         category: '',
         rating: '',
         stock: '',
-        image: ''
+        image: '',
+        transshipment: '', // Add these fields as empty strings to avoid undefined values
+        stay_time: ''
+
     });
 
 
