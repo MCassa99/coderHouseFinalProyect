@@ -145,6 +145,38 @@ const UserSettings = () => {
             })
     };
 
+    const handleUpload = (e) => {
+        const file = e.target.files[0];
+        const formData = new FormData();
+    
+        // Append the file and additional data to the FormData object
+        formData.append('document', file, `${user.first_name}_${user.last_name}_ID_${file.name}`);
+    
+        fetch('http://localhost:3000/upload/documents', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 200) {
+                Swal.fire({
+                    title: "Document uploaded successfully!",
+                    text: data.message,
+                    icon: "success",
+                });
+            } else {
+                Swal.fire({
+                    title: "Document could not be uploaded! Please try again.",
+                    text: data.message,
+                    icon: "error",
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error uploading document:', error);
+        });
+    }
+
     return (
         <div>
             <Container className="my-5">
@@ -185,6 +217,12 @@ const UserSettings = () => {
                                     value={user.newEmail}
                                     onChange={handleChange}
                                 />
+                            </Form.Group>
+                            {/* Other Form for uploading documents */}
+                            <Form.Group controlId="formFile">
+                                <Form.Label>Upload your ID</Form.Label>
+                                {/* when selected document uses handleUpload */}
+                                <Form.Control type="file" onChange={handleUpload} />                    
                             </Form.Group>
                             <div className='row mt-3 m-auto justify-content-center'>
                                 <button type='button' className="btn btn-danger col-12 mt-3" onClick={handleChangePassword}>Change Password</button>
