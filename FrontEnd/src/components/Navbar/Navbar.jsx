@@ -5,8 +5,11 @@ import Logo from '../UI/Logo/Logo.jsx';
 import CartWidget from '../CartWidget/CartWidget.jsx';
 import { Link } from 'react-router-dom';
 import UserProfile from '../../assets/default_profile.png';
+import { useUserContext } from "../UserContext/UserContext.jsx";
 
-const NavbarComponent = ({ role, id }) => {
+const NavbarComponent = () => {
+    const { user } = useUserContext();
+
     return (
         <Navbar expand="md" className="navprop">
             <Container>
@@ -28,25 +31,25 @@ const NavbarComponent = ({ role, id }) => {
                         <LinkContainer to="/category/hoteles">
                             <Nav.Link className='navprop' id='Hoteles'>Hoteles</Nav.Link>
                         </LinkContainer>
-                        {role === 'Admin' && (
+                        {user?.role === 'Admin' && (
                             <LinkContainer to="/cotizador">
                                 <Nav.Link className='navprop' id='Cotizador'>Cotizador</Nav.Link>
                             </LinkContainer>
                         )}
                     </Nav>
                     <Nav>
-                        {role !== 'Admin' && (
-                            <LinkContainer to="/cart">
+                        {user?.role !== 'Admin' && (
+                            <LinkContainer to={`/cart/${user?.cart_id}`}>
                                 <Nav.Link className='cart d-flex align-items-center justify-content-center'>
                                     <CartWidget />
                                 </Nav.Link>
                             </LinkContainer>
                         )}
                         <NavDropdown title={<img src={UserProfile} alt="User Profile" style={{ width: 35, height: 35, marginRight: 1 }} />} id="user-dropdown">
-                            <LinkContainer to={`/profile/${id}`}>
+                            <LinkContainer to={`/profile/${user?._id}`}>
                                 <NavDropdown.Item>Perfil</NavDropdown.Item>
                             </LinkContainer>
-                            <LinkContainer to={`/settings/${id}`}>
+                            <LinkContainer to={`/settings/${user?._id}`}>
                                 <NavDropdown.Item>Ajustes</NavDropdown.Item>
                             </LinkContainer>
                             <NavDropdown.Divider />

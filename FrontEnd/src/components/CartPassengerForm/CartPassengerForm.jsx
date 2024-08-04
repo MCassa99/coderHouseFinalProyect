@@ -1,22 +1,23 @@
 import React, { useState } from "react";
 import pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
+import { useUserContext } from "../UserContext/UserContext";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-function CartPassangerForm({ userInfo }) {
+function CartPassangerForm() {
   
-  const { _id, first_name, last_name, age, email } = userInfo;
+  const { user } = useUserContext();
 
   return (
     <div>
       <div className="row bg-light border">
         <p className="fw-bold col m-auto">Nombre: </p>
-        <p className="col m-auto">{first_name}</p>
+        <p className="col m-auto">{user.first_name}</p>
       </div>
 
       <div className="row bg-light border">
         <p className="fw-bold col m-auto">Apellido: </p>
-        <p className="col m-auto">{last_name}</p>
+        <p className="col m-auto">{user.last_name}</p>
       </div>
 
       <div className="row bg-light border">
@@ -26,7 +27,7 @@ function CartPassangerForm({ userInfo }) {
 
       <div className="row bg-light border">
         <p className="fw-bold col m-auto">Edad: </p>
-        <p className="col m-auto">{age}</p>
+        <p className="col m-auto">{user.age}</p>
       </div>
 
       <div className="row bg-light border">
@@ -35,8 +36,8 @@ function CartPassangerForm({ userInfo }) {
       </div>
 
       <div className="row bg-light border">
-        <p className="fw-bold col m-auto">EMail: </p>
-        <p className="col m-auto">{email}</p>
+        <p className="fw-bold col m-auto">E-Mail: </p>
+        <p className="col m-auto">{user.email}</p>
       </div>
 
     </div>

@@ -25,7 +25,7 @@ sessionRouter.get('/githubSession', passport.authenticate('github'), githubSessi
 
 sessionRouter.get('/current', current);
 
-sessionRouter.post('/register', passport.authenticate('register'), register );
+sessionRouter.post('/register', passport.authenticate('register'), register);
 
 sessionRouter.get('/logout', logout );
 

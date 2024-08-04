@@ -5,13 +5,13 @@ import wppLogo from '../../assets/WhatsApp_icon.webp'
 import agentLogo from '../../assets/Agent_icon.png'
 import { useCartContext } from '../CartContext/CartContext';
 import CartPassangerForm from '../CartPassengerForm/CartPassengerForm';
+import { useUserContext } from '../UserContext/UserContext';
 
 const ProcessPurchase = () => {
 
-    //const { addToCart } = useCartContext();
+    const { addToCart } = useCartContext();
     const [product, setProduct] = useState([]);
-    const [ user, setUser ] = useState([]);
-
+    const { user } = useUserContext();
     const { id, qty } = useParams();
 
     useEffect(() => {
@@ -20,45 +20,9 @@ const ProcessPurchase = () => {
             .then(data => setProduct(data))
     }, [id])
 
-    useEffect(() => {
-        fetch(`http://localhost:3000/api/session/current`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include'
-        })
-        .then((res) => res.json())
-        .then((res) => {
-            if (res.status === 200) {
-                setUser(res.user);
-            }
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-    }, []);
-
     const handlePunchase = () => {
-        console.log(user)
-        fetch(`http://localhost:3000/api/cart/${user.cart_id}/${id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                quantity: qty
-            })
-        })
-        .then(response => console.log(response))
-        .then(data => {
-            if (data.status === 200) {
-                console.log(data.message);
-            } else {
-                console.log(data.message);
-            }
-        }
-    )}
+        addToCart(product, user.cart_id);
+    }
 
     /*if (qty > product.stock) {
         navigate('/error/410')
@@ -125,7 +89,7 @@ const ProcessPurchase = () => {
                         {Array.from({ length: qty ? qty : 1 }, (_, index) => (
                             <div key={index}>
                                 <h5 className='text-center'>Pasajero {index+1}</h5>
-                                <CartPassangerForm userInfo={ user }/>
+                                <CartPassangerForm />
                             </div>
                         ))}
                     </div>
@@ -135,7 +99,7 @@ const ProcessPurchase = () => {
             <div>
                 <div className='d-flex flex-column justify-content-center align-items-center'>
                     <span>Mira tus productos</span>
-                    <Link to={`/cart`} className="text-decoration-none">
+                    <Link to={`/cart/${user.cart_id}`} className="text-decoration-none">
                         <button className='btn btn-secondary'><strong>IR AL CARRITO</strong></button>
                     </Link>    
                 </div>

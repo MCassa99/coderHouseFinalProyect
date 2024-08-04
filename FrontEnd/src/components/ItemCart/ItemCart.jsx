@@ -5,16 +5,20 @@ import { FaPlane } from "react-icons/fa";
 import CartPassangerForm from "../CartPassengerForm/CartPassengerForm";
 import PassengerCard from "../PassengerCard/PassengerCard";
 import { info } from "sass";
+import { useUserContext } from "../UserContext/UserContext";
 
-const itemCart = ({ product, qty, information }) => {
+const itemCart = ({ product, qty }) => {
 
-  const { removeProduct, removeProductFromCart } = useCartContext();
-  const { id, title, cat } = product;
+  const { removeProductFromCart } = useCartContext();
+  const { user } = useUserContext();
+  const { _id, title, description, image, category } = product;
+
+  console.log('user', user);
 
   let titleClass;
-  cat === "vuelos"
+  category === "vuelos"
     ? (titleClass = "text-center bg-info rounded-5 p-2 mb-3")
-    : cat === "hoteles"
+    : category === "hoteles"
     ? (titleClass = "text-center bg-warning rounded-5 p-2 mb-3")
     : (titleClass = "text-center bg-success rounded-5 p-2 mb-3");
 
@@ -24,7 +28,7 @@ const itemCart = ({ product, qty, information }) => {
         <RxCross2
           size={25}
           onClick={() => {
-            removeProductFromCart(id);
+            removeProductFromCart(user.cart_id, product._id);
           }}
           style={{ marginLeft: -0.6 + "rem", marginTop: -0.6 + "rem" }}
         />
@@ -116,7 +120,7 @@ const itemCart = ({ product, qty, information }) => {
             </button>
             <div className="dropdown-menu w-100">
               <div>
-                {information.map(info => <div key={info.documento}><PassengerCard passenger={info} /><hr/></div>)}
+                <PassengerCard passenger={user} />
               </div>
             </div>
           </div>
@@ -212,7 +216,7 @@ const itemCart = ({ product, qty, information }) => {
     </div>
   );
 
-  let cartSelected = cat === "vuelos" ? cardFlight : cardFlight;
+  let cartSelected = category === "vuelos" ? cardFlight : cardFlight;
 
   return <>{cartSelected}</>;
 };

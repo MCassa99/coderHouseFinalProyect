@@ -40,21 +40,19 @@ export const addProductToCart = async (req, res) => {
                const index = cart.products.findIndex(product => product.id_prod._id == productID);
 
                if (index != -1) {
-                    cart.products[index].quantity += quantity;
+                    cart.products[index].quantity += parseInt(quantity);
                }
                // Si no existe, se agrega al carrito
                else {
-                    cart.products.push({ id_prod: productID, quantity: quantity });
+                    cart.products.push({ id_prod: productID, quantity: parseInt(quantity) });
                }
                await cartModel.findByIdAndUpdate(cartID, cart);         
-               const newCart = cartModel.findById(cartID);
-               res.status(200).send(newCart);
+               res.send({ status: 200, message: 'Producto agregado al carrito' });
           //} else {
           //     res.status(401).send('Usuario no autorizado');
           //}
      } catch (error) {
-          console.log(error);
-          res.status(500).send('Error interno del servidor al agregar el producto' + error);
+          res.send({ status: 500, message: 'Error interno del servidor al agregar el producto' });
      }
 }
 
@@ -113,7 +111,7 @@ export const createTicket = async (req, res) => {
 
 }
 
-export const deleteProductFromCart = async (res, req) => {
+export const deleteProductFromCart = async (req, res) => {
      try {
           const cartID = req.params.cid;
           const productID = req.params.pid;
@@ -121,13 +119,13 @@ export const deleteProductFromCart = async (res, req) => {
           const index = cart.products.findIndex(product => product.id_prod._id == productID);
           if (index != -1) {
                cart.products.splice(index, 1);
-               const deletedCart = await cartModel.findByIdAndUpdate(cartID, cart);
-               return res.status(200).send(deletedCart);         
+               await cartModel.findByIdAndUpdate(cartID, cart);
+               return res.send({ status: 200, message: 'Producto eliminado del carrito' });         
           } else {
-               return res.status(404).send('Producto no encontrado en el carrito');
+               return res.send({ status: 404, message: 'Producto no encontrado en el carrito' });
           }          
      } catch (error) {
-          return res.status(500).send('Error interno del servidor al eliminar el producto' + error);
+          return res.send({ status: 500, message: 'Error interno del servidor al eliminar el producto' });
      }
 }
 

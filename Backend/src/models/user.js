@@ -40,6 +40,7 @@ const userSchema = new Schema({
 });
 
 //Create cart for user
+/*
 userSchema.pre('save', async function (next) {
      try {
           const newCart = await cartModel.create({ products: [] });
@@ -47,14 +48,18 @@ userSchema.pre('save', async function (next) {
      } catch (error) {
           next(error);
      }
-});
+});*/
 
-userSchema.pre('find', async function(next) {
+//Create cart for user only if it is a new user
+userSchema.pre("save", async function (next) {
      try {
-          const products = await cartModel.findOne({ _id: this.cart_id });
-          this.populate('cart_id');
+          if (this.isNew) {
+               const newCart = await cartModel.create({ products: [] });
+               this.cart_id = newCart._id;
+          }
+          next();
      } catch (error) {
-          next(error)
+          next(error);
      }
 });
 
