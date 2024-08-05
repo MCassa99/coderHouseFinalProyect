@@ -3,15 +3,17 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 
 const CheckOut = ({ children }) => {
-  const [nombre, setNombre] = useState("");
-  const [apellido, setApellido] = useState("");
-  const [email, setEmail] = useState("");
-  const [telefono, setTelefono] = useState("");
-  const [confirmEmail, setConfirmEmail] = useState("");
-  const [error, setError] = useState(false);
-  const [orderID, setOrderID] = useState("");
 
-  const { getCartTotal, clearCart } = useCartContext();
+  const [buyer, setBuyer] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone: "",
+    confirmEmail: "",
+  });
+  console.log(buyer);
+
+  const { getCartTotal, clearCart, cartID, createTicket } = useCartContext();
 
   function success() {
     Swal.fire({
@@ -20,8 +22,9 @@ const CheckOut = ({ children }) => {
       icon: "success",
       confirmButtonText: "Genial!",
     });
-    new Promise((resolve) => setTimeout(resolve, 3000)).then(() => {
-      clearCart();
+    new Promise((resolve) => setTimeout(resolve, 2000)).then(() => {
+      createTicket(cartID);
+      clearCart(cartID);
       window.location.href = "/";
     });
   }
@@ -36,13 +39,12 @@ const CheckOut = ({ children }) => {
   }
 
   function paySuccess() {
-    console.log(nombre, apellido, email, telefono, confirmEmail);
-    let verify = nombre != "" && apellido != "" && email != "" && telefono != "" && email == confirmEmail;
-    console.log(verify);
+    //console.log(nombre, apellido, email, telefono, confirmEmail);
+    let verify = buyer.first_name != "" && buyer.last_name != "" && buyer.email != "" && buyer.phone != "" && buyer.email == buyer.confirmEmail;
+    //console.log(verify);
     verify ? success() : errorDatos();
     
   }
-
   return (
     <div className="container w-50 mt-5">
       <div className="row justify-content-center">
@@ -57,7 +59,8 @@ const CheckOut = ({ children }) => {
                 id="nombre"
                 placeholder="Nombre"
                 required
-                onChange={(e) => setNombre(e.target.value)}
+                value={buyer.first_name}
+                onChange={(e) => setBuyer({ ...buyer, first_name: e.target.value })}
               />
             </div>
             <div className="col">
@@ -68,7 +71,8 @@ const CheckOut = ({ children }) => {
                 id="apellido"
                 placeholder="Apellido"
                 required
-                onChange={(e) => setApellido(e.target.value)}
+                value={buyer.last_name}
+                onChange={(e) => setBuyer({ ...buyer, last_name: e.target.value })}
               />
             </div>
           </div>
@@ -81,7 +85,8 @@ const CheckOut = ({ children }) => {
                 id="email"
                 placeholder="Email"
                 required
-                onChange={(e) => setEmail(e.target.value)}
+                value={buyer.email}
+                onChange={(e) => setBuyer({ ...buyer, email: e.target.value })}
               />
             </div>
             <div className="col">
@@ -92,7 +97,8 @@ const CheckOut = ({ children }) => {
                 id="confirmEmail"
                 placeholder="Confirmar Email"
                 required
-                onChange={(e) => setConfirmEmail(e.target.value)}
+                value={buyer.confirmEmail}
+                onChange={(e) => setBuyer({ ...buyer, confirmEmail: e.target.value })}
               />
             </div>
           </div>
@@ -105,7 +111,8 @@ const CheckOut = ({ children }) => {
                 id="telefono"
                 placeholder="Telefono"
                 required
-                onChange={(e) => setTelefono(e.target.value)}
+                value={buyer.phone}
+                onChange={(e) => setBuyer({ ...buyer, phone: e.target.value })}
               />
             </div>
           </div>

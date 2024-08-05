@@ -20,9 +20,9 @@ function App() {
   const navigate = useNavigate();
   const { user, loggedIn } = useUserContext();
 
-  console.log(user, loggedIn);
+  //console.log(user, loggedIn);
 
- /* useEffect(() => {
+  useEffect(() => {
     const timer = setTimeout(() => {
       if (!loggedIn) {
         navigate("/login");
@@ -31,7 +31,7 @@ function App() {
 
     // Cleanup function to clear the timeout if the component unmounts
     return () => clearTimeout(timer);
-  }, [user, navigate]);*/
+  }, [user, navigate]);
 
   return (
     <div className="App">

@@ -13,7 +13,7 @@ const itemCart = ({ product, qty }) => {
   const { user } = useUserContext();
   const { _id, title, description, image, category } = product;
 
-  console.log('user', user);
+  //console.log('user', user);
 
   let titleClass;
   category === "vuelos"

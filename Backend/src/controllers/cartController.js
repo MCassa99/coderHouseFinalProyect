@@ -129,12 +129,12 @@ export const deleteProductFromCart = async (req, res) => {
      }
 }
 
-export const deleteCart = async (id) => {
+export const deleteCart = async (req, res) => {
      try {
           const cartID = req.params.cid;
-          const deletedFullCart = await cartModel.findByIdAndDelete(cartID);
-          return res.status(200).send("Carrito vaciado con exito");
+          await cartModel.findByIdAndDelete(cartID);
+          return res.send({ status: 200, message: 'Carrito eliminado' });
      } catch (error) {
-          return res.status(500).send('Error interno del servidor al vaciar el carrito' + error);
+          return res.send({ status: 500, message: 'Error interno del servidor al eliminar el carrito' });
      }
 }

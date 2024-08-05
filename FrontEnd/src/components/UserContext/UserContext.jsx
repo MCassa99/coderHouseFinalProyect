@@ -9,7 +9,7 @@ export const useUserContext = () => useContext(UserContext);
 
 // Create the provider component
 export const UserProvider = ({ children }) => {
-     const [user, setUser] = useState(null);
+     const [user, setUser] = useState({});
      const [loggedIn, setLoggedIn] = useState(false);
 
      useEffect(() => {
@@ -27,7 +27,10 @@ export const UserProvider = ({ children }) => {
                          }
                     );
                     const data = await response.json();
-                    setUser(data.user);
+                    if (data.status === 200)
+                         setUser(data.user);
+                    else
+                         setUser(null);
                } catch (error) {
                     console.error("Failed to fetch user:", error);
                }
@@ -44,8 +47,8 @@ export const UserProvider = ({ children }) => {
           try {
                const data = await login(email, password);
                if (data.status === 200) {
-                    setUser({ ...data, loggedIn: true });
-                    return data;
+                    setUser({ ...data.user, loggedIn: true });
+                    return data.user;
                } else {
                     return { status: data.status, message: data.message };
                }
@@ -79,6 +82,7 @@ export const UserProvider = ({ children }) => {
                     credentials: "include",
                });
                setUser(null);
+               setLoggedIn(false);
           } catch (error) {
                console.error("Failed to logout:", error);
           }

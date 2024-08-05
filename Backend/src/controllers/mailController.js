@@ -12,15 +12,16 @@ const transporter = nodemailer.createTransport({
 });
 
 export const sendMail = async (req, res) => {
+     const { email, subject, text } = req.body;
      try {
           const mail = await transporter.sendMail({
                from: 'Test Coder <mcassa1999@gmail.com>',
-               to: 'mcassa1999@gmail.com',
-               subject: 'Test',
+               to: email,
+               subject: subject,
                html: `
                     <div>
                          <h1>Test</h1>
-                         <p>Esto es una prueba</p>
+                         <p>${text}</p>
                     </div>
                `,
                attachments: [

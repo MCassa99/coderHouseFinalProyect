@@ -27,7 +27,8 @@ const Login = () => {
                const password = document.getElementById("password").value;
 
                const data = await handleLogin(email, password);
-               if (data.status === 200) {
+               console.log(data);
+               if (data.email) {
                     Swal.fire({
                          title: "Login Successfully!",
                          text: data.message,
