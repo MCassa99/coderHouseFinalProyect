@@ -20,14 +20,12 @@ function App() {
   const navigate = useNavigate();
   const { user, loggedIn } = useUserContext();
 
-  //console.log(user, loggedIn);
-
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!loggedIn) {
         navigate("/login");
       }
-    }, 200); // 1 second delay
+    }, 200); // Redirect to login after 200ms if user is not logged in
 
     // Cleanup function to clear the timeout if the component unmounts
     return () => clearTimeout(timer);

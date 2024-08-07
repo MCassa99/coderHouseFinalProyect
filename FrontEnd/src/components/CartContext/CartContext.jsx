@@ -20,11 +20,16 @@ const CartProvider = ({ children }) => {
                 headers: {
                     "Content-Type": "application/json",
                 },
+                credentials: "include"
             })
-            .then((res) => console.log(res))
-            .then((data) => {
-                setCartItems(data.products);
-            })
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.status === 200) {
+                        setCartItems(data.cart.products);
+                    } else {
+                        console.error(data.message);
+                    }
+                })
             .catch((error) => {
                 console.error(error);
             });
@@ -122,7 +127,7 @@ const CartProvider = ({ children }) => {
 
     const clearCart = (cartID) => {
         fetch(`http://localhost:3000/api/cart/${cartID}`, {
-            method: "DELETE",
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -158,13 +163,15 @@ const CartProvider = ({ children }) => {
 
     const createTicket = async (cartID) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/cart/${cartID}/punchase`, {
+            const response = await fetch(`http://localhost:3000/api/cart/${cartID}/purchase`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
+                include: "credentials"
             });
             const data = await response.json();
+            console.log(data);
             if (data.status === 200) {
                 handleSendTicket(data);
             } else {

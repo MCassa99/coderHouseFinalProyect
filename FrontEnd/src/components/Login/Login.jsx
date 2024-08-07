@@ -4,7 +4,7 @@ import { useUserContext } from "../UserContext/UserContext";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-     const { setLoginStatus, handleLogin, handleSignUp } = useUserContext();
+     const { handleLogin, handleSignUp } = useUserContext();
      const [action, setAction] = useState("Login");
      const navigate = useNavigate(); // Add this line
 
@@ -34,7 +34,6 @@ const Login = () => {
                          text: data.message,
                          icon: "success",
                     }).then(() => {
-                         setLoginStatus(true);
                          navigate("/"); // Update this line for navigation
                     });
                } else {

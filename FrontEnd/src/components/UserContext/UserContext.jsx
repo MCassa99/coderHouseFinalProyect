@@ -13,41 +13,38 @@ export const UserProvider = ({ children }) => {
      const [loggedIn, setLoggedIn] = useState(false);
 
      useEffect(() => {
-          console.log("Fetching user data...");
-          const fetchUser = async () => {
-               try {
-                    const response = await fetch(
-                         "http://localhost:3000/api/session/current",
-                         {
-                              method: "GET",
-                              headers: {
-                                   "Content-Type": "application/json",
-                              },
-                              credentials: "include",
+          try {
+               fetch("http://localhost:3000/api/session/current",
+                    {
+                         method: "GET",
+                         headers: {
+                              "Content-Type": "application/json",
+                         },
+                         credentials: "include",
+                    }
+               )
+               .then((res) => res.json())
+                    .then((data) => {
+                         if (data.status === 200) {
+                              setUser(data.user);
+                              setLoggedIn(true);
+                         } else {
+                              setUser(null);
+                              setLoggedIn(false);
                          }
-                    );
-                    const data = await response.json();
-                    if (data.status === 200)
-                         setUser(data.user);
-                    else
-                         setUser(null);
-               } catch (error) {
-                    console.error("Failed to fetch user:", error);
-               }
-          };
-
-          fetchUser();
+                    });
+               
+          } catch (error) {
+               console.error("Failed to fetch user:", error);
+          }
      }, []);
-
-     const setLoginStatus = (status) => {
-          setLoggedIn(status ? { loggedIn: true } : null);
-     };
 
      const handleLogin = async (email, password) => {
           try {
                const data = await login(email, password);
                if (data.status === 200) {
-                    setUser({ ...data.user, loggedIn: true });
+                    setUser(data.user);
+                    setLoggedIn(true);
                     return data.user;
                } else {
                     return { status: data.status, message: data.message };
@@ -156,7 +153,6 @@ export const UserProvider = ({ children }) => {
                     loggedIn,
                     handleLogin,
                     handleSignUp,
-                    setLoginStatus,
                     logoutUser,
                     updateUser,
                     changePassword,

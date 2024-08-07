@@ -17,13 +17,12 @@ export const getCartById = async (req, res) => {
      try {
           const cartID = req.params.cid;
           const cart = await cartModel.findOne({ _id: cartID })
-          /*const productsCart = products.map(product => product.id_prod.toJSON());
-          return res.status(200).render('templates/cart', {
+          /* return res.status(200).render('templates/cart', {
                mostrarCarrito: true,
                products: productsCart,
                css: 'cart.css'
           });*/
-          return res.status(200).send(cart);
+          return res.send({ status: 200, cart: cart });
      } catch (error) {
           return res.status(500).send('Error interno del servidor al mostrar el carrito');
      }
@@ -87,7 +86,7 @@ export const createTicket = async (req, res) => {
                     });
                     //Vacio carrito
                     await deleteCart(cartID);
-                    res.status(200).send(newTicket);
+                    res.send({ status: 200, message: 'Ticket creado', ticket: newTicket });
                } else {
                     console.log('No hay stock suficiente para los siguientes productos: ', prodNoStock);
                     prodNoStock.forEach((productID) => {
@@ -98,15 +97,15 @@ export const createTicket = async (req, res) => {
                          products: cart.products
                     });
                     req.logger.info('No hay stock suficiente para los siguientes productos: ', prodNoStock);
-                    res.status(400).send('No hay stock suficiente para los siguientes productos: ', prodNoStock);
+                    res.send({ status: 404, message: 'No hay stock suficiente para los siguientes productos: ', prodNoStock });
                }
           } else {
                req.logger.error('Carrito no encontrado');
-               res.status(404).send('Carrito no encontrado');
+               res.send({ status: 404, message: 'Carrito no encontrado' });
           }
      } catch (error) {
           req.logger.fatal('Error al crear ticket ', error);
-          res.status(500).send('Error interno del servidor al crear el ticket' + error);
+          res.send({ status: 500, message: 'Error interno del servidor al crear ticket' });
      }
 
 }
@@ -132,7 +131,9 @@ export const deleteProductFromCart = async (req, res) => {
 export const deleteCart = async (req, res) => {
      try {
           const cartID = req.params.cid;
-          await cartModel.findByIdAndDelete(cartID);
+          const cart = await cartModel.findById(cartID);
+          cart.products = [];
+          await cartModel.findByIdAndUpdate(cartID, cart);
           return res.send({ status: 200, message: 'Carrito eliminado' });
      } catch (error) {
           return res.send({ status: 500, message: 'Error interno del servidor al eliminar el carrito' });

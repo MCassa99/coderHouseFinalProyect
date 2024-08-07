@@ -6,7 +6,6 @@ import Brief from "../Brief/Brief.jsx";
 
 const Cart = () => {
   const { getCartCount, cartItems } = useCartContext();
-  console.log(cartItems);
 
   if (getCartCount() === 0) {
     return (
@@ -23,6 +22,7 @@ const Cart = () => {
       </div>
     );
   }
+  console.log(cartItems);
 
   return (
     <div className="d-flex justify-content-evenly mt-5">

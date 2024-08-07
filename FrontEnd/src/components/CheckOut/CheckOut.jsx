@@ -13,20 +13,11 @@ const CheckOut = ({ children }) => {
   });
   console.log(buyer);
 
-  const { getCartTotal, clearCart, cartID, createTicket } = useCartContext();
+  const { getCartTotal, cartID, createTicket } = useCartContext();
 
   function success() {
-    Swal.fire({
-      title: "Pago Exitoso",
-      text: "Su pago fue exitoso, sera redireccionado a la pagina de inicio.",
-      icon: "success",
-      confirmButtonText: "Genial!",
-    });
-    new Promise((resolve) => setTimeout(resolve, 2000)).then(() => {
-      createTicket(cartID);
-      clearCart(cartID);
-      window.location.href = "/";
-    });
+    const pay = createTicket(cartID);
+    console.log(pay);
   }
 
   function errorDatos() {

@@ -23,6 +23,6 @@ cartRouter.post('/:cid/purchase', createTicket);
 cartRouter.delete('/:cid/:pid', deleteProductFromCart);
 
 //Vaciar carrito
-cartRouter.delete('/:cid', deleteCart);
+cartRouter.put('/:cid', deleteCart);
 
 export default cartRouter;

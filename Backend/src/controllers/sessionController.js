@@ -21,6 +21,7 @@ export const login = async (req, res) => {
           }
           
           req.session.user = {
+               _id: req.user._id,
                email: req.user.email,
                first_name: req.user.first_name,
                last_name: req.user.last_name,
@@ -28,6 +29,7 @@ export const login = async (req, res) => {
                last_connection: req.user.last_connection,
                cart_id: req.user.cart_id
           }
+
           const userToken = generateToken(req.session.user);
           console.log("Usuario Logeado: ", req.session.user)
           //console.log("Usuario: ", user, "\nToken: ", userToken)
