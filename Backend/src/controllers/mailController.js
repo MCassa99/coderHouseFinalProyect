@@ -28,7 +28,6 @@ export const sendMail = async (req, res) => {
           </div>
           `
      }
-     console.log(mailOptions);
      transporter.sendMail(mailOptions, (error, info) => {
           if (error) {
                console.log('Error al enviar correo: ', error);

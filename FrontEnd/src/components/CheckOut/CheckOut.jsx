@@ -16,7 +16,7 @@ const CheckOut = ({ children }) => {
   const { getCartTotal, cartID, createTicket } = useCartContext();
 
   function success() {
-    const pay = createTicket(cartID);
+    const pay = createTicket(cartID, buyer.email);
     console.log(pay);
   }
 

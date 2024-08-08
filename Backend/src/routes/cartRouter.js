@@ -12,11 +12,11 @@ cartRouter.post('/', createCart);
 //Listar todos los productos
 cartRouter.get('/:cid', getCartById);
 
-//Agregar un producto al carrito
-cartRouter.post('/:cid/:pid', addProductToCart);
-
 //Creo Ticket de compra
 cartRouter.post('/:cid/purchase', createTicket);
+
+//Agregar un producto al carrito
+cartRouter.post('/:cid/:pid', addProductToCart);
 
 //SE AGREGARON A PARTE DE LO PEDIDO ESTOS 2 ENDPOINTS
 //Eliminar un producto del carrito

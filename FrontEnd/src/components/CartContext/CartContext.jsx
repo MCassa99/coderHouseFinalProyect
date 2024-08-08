@@ -55,6 +55,8 @@ const CartProvider = ({ children }) => {
                         title: 'Ticket Enviado!',
                         text: 'Se ha enviado el ticket de compra a su correo',
                         icon: 'success'
+                    }).then(() => {
+                        location.replace(`http://localhost:5173/`);
                     });
                 } else {
                     Swal.fire({
@@ -161,14 +163,15 @@ const CartProvider = ({ children }) => {
         return cartItems.reduce((count, item) => count + item.quantity, 0);
     };
 
-    const createTicket = async (cartID) => {
+    const createTicket = async (cartID, email) => {
         try {
             const response = await fetch(`http://localhost:3000/api/cart/${cartID}/purchase`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                include: "credentials"
+                include: "credentials",
+                body: JSON.stringify({ email: email })
             });
             const data = await response.json();
             console.log(data);
