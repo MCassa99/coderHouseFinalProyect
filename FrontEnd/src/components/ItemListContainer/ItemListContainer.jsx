@@ -2,11 +2,14 @@
 import ItemList from '../ItemList/ItemList'
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import { useUserContext } from "../UserContext/UserContext";
 
-const ItemListContainer = ({ user }) => {
+
+const ItemListContainer = () => {
 
     const [product, setProduct] = useState([]);
     const { id } = useParams();
+    const { user } = useUserContext();
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -45,7 +48,7 @@ const ItemListContainer = ({ user }) => {
                 <h2 className='greeting'></h2>
             </div>
             <div>
-                <ItemList product={product} id={id ? user === 'Admin' ? true : false : false}/>
+                <ItemList product={product} id={user._id ? user.role === 'Admin' ? true : false : false}/>
             </div>
         </div>
     )

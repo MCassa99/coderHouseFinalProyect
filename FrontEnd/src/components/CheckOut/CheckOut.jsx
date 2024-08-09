@@ -11,7 +11,6 @@ const CheckOut = ({ children }) => {
     phone: "",
     confirmEmail: "",
   });
-  console.log(buyer);
 
   const { getCartTotal, cartID, createTicket } = useCartContext();
 
